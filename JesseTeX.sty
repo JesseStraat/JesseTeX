@@ -1,0 +1,374 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{JesseTeX}[2021/12/29 Jesse's custom Package 2.0]
+
+
+
+%How to make a JesseTeX document:
+%
+%\documentclass{article}
+%\usepackage[lang = language]{JesseTeX}
+%
+%\title{title}
+%\author{name} OR \author{name\\00000000}
+%\tutorial{tutorial group}
+
+%\begin{document}
+%\maketitle
+%foobar
+%\end{document}
+
+
+%If the document has multiple authors, use
+%\author{Person 1 \\ 00000001 \authand Person 2 \\ 00000002}
+
+
+
+%% Preamble to the package %%
+
+
+% The following packages are used for some technical things %
+\RequirePackage{kvoptions}
+\RequirePackage{ifthen}
+\RequirePackage{xstring}
+\RequirePackage{xparse}
+
+% Setting up the options %
+\SetupKeyvalOptions{}
+	
+	\DeclareStringOption[none]{theme}	% theme = true or theme = false
+	
+	\DeclareStringOption[dutch]{lang}	% Language options
+	
+	\newboolean{count}
+	\setboolean{count}{true}
+	\DeclareVoidOption{nocount}{ \setboolean{count}{false} }	% "Don't display total number of pages in title"
+	
+\ProcessKeyvalOptions*
+
+% Checks whether we should apply the theme to the document %
+\newboolean{theme}
+% If the document class is article, we apply the theme by default %
+\@ifclassloaded{article}{\setboolean{theme}{true}}{\setboolean{theme}{false}}
+% Overwrites the option if an option was selected during loading %
+\IfStrEqCase{\JesseTeX@theme}{%
+	{true}{%
+		\setboolean{theme}{true}
+	}
+	{false}{%
+		\setboolean{theme}{false}
+	}
+	{none}{}
+}
+
+
+
+%% Setup %%
+
+
+% Theme packages %
+\ifthenelse{\boolean{theme}}{% then
+	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
+	\RequirePackage{hyperref}						% Hyperlinks
+	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
+	\RequirePackage[sorting=none]{biblatex}			% Citations
+}{% else
+}
+
+% Other packages %
+\RequirePackage[\JesseTeX@lang]{babel}				% Language-related things
+\RequirePackage[utf8]{inputenc}						% Quality of life for easier typing
+\RequirePackage{graphicx}							% Adding images
+\RequirePackage{amsfonts}							% Some mathematical symbols
+\RequirePackage{amssymb}							% Ditto
+\RequirePackage{mathrsfs}							% Prettier mathscr symbols and the like
+\RequirePackage{physics}							% Some mathematical equations
+
+% Fixing some issues in the physics package %
+%BEGIN_FOLD
+\DeclareDocumentCommand\derivative{ s o m g d() }
+{ % Total derivative
+	% s: star for \flatfrac flat derivative
+	% o: optional n for nth derivative
+	% m: mandatory (x in df/dx)
+	% g: optional (f in df/dx)
+	% d: long-form d/dx(...)
+	\IfBooleanTF{#1}
+	{\let\fractype\flatfrac}
+	{\let\fractype\frac}
+	\IfNoValueTF{#4}
+	{
+		\IfNoValueTF{#5}
+		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
+		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+	}
+	{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
+}
+\DeclareDocumentCommand\partialderivative{ s o m g g d() }
+{ % Partial derivative
+	% s: star for \flatfrac flat derivative
+	% o: optional n for nth derivative
+	% m: mandatory (x in df/dx)
+	% g: optional (f in df/dx)
+	% g: optional (y in d^2f/dxdy)
+	% d: long-form d/dx(...)
+	\IfBooleanTF{#1}
+	{\let\fractype\flatfrac}
+	{\let\fractype\frac}
+	\IfNoValueTF{#4}
+	{
+		\IfNoValueTF{#6}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#6\argclose)}
+	}
+	{
+		\IfNoValueTF{#5}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}} #3}{\partial #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#6}{(#6)}}
+		{\fractype{\partial^2 #3}{\partial #4 \partial #5}\IfValueT{#6}{(#6)}}
+	}
+}
+%END_FOLD
+
+% Other packages part II %
+\RequirePackage{mathtools}							% More mathematical symbols, e.g., for proofs
+\RequirePackage{wasysym}							% Ditto
+\RequirePackage{amsthm}								% Theorem environments (for proofs)
+\RequirePackage{lastpage}							% For counting the total amount of pages
+\RequirePackage{textcomp}							% Text symbols
+\RequirePackage{fancyhdr}							% Prettier layout and headers
+\RequirePackage{comment}							% Allows a comment environment for multi-line comments
+\RequirePackage{tikz}								% Lets you draw images
+\RequirePackage{pgfplots}							% Drawing plots (via TikZ)
+\usetikzlibrary{calc}								% Aritmatic in TikZ drawings
+
+
+
+%% Language settings %%
+
+
+% Default language (Dutch) %
+%BEGIN_FOLD
+\newcommand{\tutorialstr}{Werkcollegegroep }
+\newcommand{\totpage}{Totaal aantal pagina's: }
+\newcommand{\propo}{Voorstel}
+\newcommand{\lemm}{Lemma}
+\newcommand{\defin}{Definitie}
+\newcommand{\theor}{Stelling}
+\newcommand{\clai}{Bewering}
+\newcommand{\coro}{Gevolg}
+%END_FOLD
+
+% Other languages %
+\IfStrEqCase{\JesseTeX@lang}{%
+	{english}{%BEGIN_FOLD
+		\renewcommand{\tutorialstr}{Problem class }
+		\renewcommand{\totpage}{Total number of pages: }
+		\renewcommand{\propo}{Proposition}
+		\renewcommand{\lemm}{Lemma}
+		\renewcommand{\defin}{Definition}
+		\renewcommand{\theor}{Theorem}
+		\renewcommand{\clai}{Claim}
+		\renewcommand{\coro}{Corollary}
+	}%END_FOLD
+}
+
+% Environments for proofs %
+\newtheorem{proposition}{\propo}
+\newtheorem*{proposition*}{\propo}
+
+\newtheorem{lemma}{\lemm}
+\newtheorem*{lemma*}{\lemm}
+
+\newtheorem{definition}{\defin}
+\newtheorem*{definition*}{\defin}
+
+\newtheorem{theorem}{\theor}
+\newtheorem*{theorem*}{\theor}
+
+\newtheorem{claim}{\clai}
+\newtheorem*{claim*}{\clai}
+
+\newtheorem{corollary}{\coro}
+\newtheorem*{corollary*}{\coro}
+
+% Deprecated environments %
+\newtheorem{prop}{\propo}	%Proposition
+\newtheorem*{prop*}{\propo}
+\newtheorem{lem}{\lemm}		%Lemma
+\newtheorem*{lem*}{\lemm}
+\newtheorem{defi}{\defin}	%Definition
+\newtheorem*{defi*}{\defin}
+\newtheorem{stel}{\theor}	%Theorem
+\newtheorem*{stel*}{\theor}
+\newtheorem{cor}{\coro}		%Corollary
+\newtheorem*{cor*}{\coro}
+
+
+% Some new symbols
+\DeclareUnicodeCharacter{20AC}{\euro{}}				% Might be deprecated
+% Swapping \epsilon and \varepsilon %
+\let\temp\epsilon
+\let\epsilon\varepsilon
+\let\varepsilon\temp
+% Swapping \phi and \varphi%
+\let\temp\phi
+\let\phi\varphi
+\let\varphi\temp
+% Some sets %
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\Id}{\text{Id}}
+
+
+
+%% Field-specific macros %%
+
+
+% Some probability stuff %
+%BEGIN_FOLD
+\NewDocumentCommand{\prob}{ m } {					% Probability of a variable
+	\mathbb{P}\left( #1 \right)
+}
+\NewDocumentCommand{\per}{ m }{ \prob{#1} }			% Deprecated
+\NewDocumentCommand{\ex}{ m O{} } {					% Expectation value of a variable
+	\mathbb{E}^{ #2 }\left[ #1 \right]
+}
+\NewDocumentCommand{\vari}{ m } {					% Variance of a variable
+	\text{Var}\left( #1 \right)
+}
+\NewDocumentCommand{\mse}{ m } {					% Mean squared error of a variable
+	\text{MSE}\left( #1 \right)
+}
+% Deprecated macros for a course in probability and statistics %
+\newcommand{\convp}{\overset{p}{\to}}
+\newcommand{\scrf}{\mathcal{F}}
+\newcommand{\scrp}{\mathcal{P}}
+%END_FOLD
+
+% Some analysis stuff %
+%BEGIN_FOLD
+% Upper integral %
+\def\upint{\mathchoice%
+	{\mkern13mu\overline{\vphantom{\intop}\mkern10mu}\mkern-20mu}%
+	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
+	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
+	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
+	\int}
+% Lower integral %
+\def\lowint{\mkern3mu\underline{\vphantom{\intop}\mkern10mu}\mkern-10mu\int}
+%END_FOLD
+
+% Topology %
+%BEGIN_FOLD
+% Set interior %
+\NewDocumentCommand{\intr}{ m } {
+	\ \text{Int}\mathopen{}\mathclose\bgroup\left( #1 \aftergroup\egroup\right)
+}
+%END_FOLD
+
+
+
+%% Theme %%
+
+
+\ifthenelse{\boolean{theme}}{
+	
+	% Tutorial group for in the title %
+	\gdef \@tutrl {}
+	\NewDocumentCommand{\tutorialgroup}{ m } {
+		\gdef \@tutrl {\tutorialstr #1}
+	}
+	\NewDocumentCommand{\wcgroep}{ m }{ \tutorialgroup{#1} }	% Deprecated
+	
+	% authand is only to be used for \author, or your document WILL  break
+	\def\authand{%
+		% \begin{tabular} is implied
+		\end{tabular}%
+		\hskip 1em \@plus.17fil%
+		\begin{tabular}{c}%
+		% \end{tabular} is implied
+	}%
+	
+	% Pretty pagestyle %
+	\pagestyle{fancy}\fancyhf{}
+	% Adding authors to the top right %
+	\fancyhead[R]{\begin{tabular}{c}
+			\@author
+	\end{tabular}}
+	% Adding the title to the top left %
+	\fancyhead[L]{\begin{tabular}{l}
+			\@title
+	\end{tabular}}
+	% Adding the page number to the bottom %
+	\fancyfoot[C]{\thepage}
+	
+	% New title function %
+	\renewcommand{\maketitle}{
+		\newpage%
+		\null%
+		%\vskip 2em%				%The title takes enough space already, so I chose to disable this
+		\begin{center}%
+			\let \footnote \thanks%
+			% Title %
+			{\LARGE \@title \par}%
+			\vskip 1.5em%
+			% Author table %
+			{\large%
+				\lineskip .5em%
+				\begin{tabular}[t]{c}%
+					\@author%
+				\end{tabular}\par%
+			}%
+			\vskip 0.5em%
+			% Tutorial group %
+			{\large \@tutrl}%
+			% Date %
+			\vskip 0.5em%
+			{\large \@date}%
+			% Total page count %
+			\vskip 0.5em%
+			\ifthenelse{ \boolean{count} }{%then
+				{\large \totpage\pageref{LastPage}}%
+			}{%else
+			}%
+		\end{center}%
+		\par%
+		\vskip 1.5em%
+		\thispagestyle{plain}}%	%Resets page style to not include header
+}{%else
+	% Redefines authand so the document doesn't break if you switch from theme to notheme %
+	\def\authand{\and}
+}
+
+
+
+%% Easter eggs (very secret) %%
+
+% Improved QED command (as opposed to \qed) %
+\newcommand{\QED}{
+	\begin{tikzpicture}
+		\draw [fill=red] (0, 0) -- (0, 4) arc[start angle=180, end angle=0, x radius = 1.5, y radius = 1] -- (3, 0) arc[start angle = 0, end angle = -180, x radius = 0.6, y radius = 0.25] -- (1.8, 0.8) -- (1.2, 0.8) -- (1.2, 0) arc[start angle = 0, end angle = -180, x radius = 0.6, y radius = 0.25];
+		\draw [fill=white] (2.2,3.2) circle [x radius = 1.2, y radius = 0.6];
+		\draw [fill=red] (0, 3.7) arc[start angle = 90, end angle = 270, y radius = 1.2, x radius = 0.6];
+	\end{tikzpicture}
+}
+
+% Including tikzducks for scientific applications %
+% https://tex.stackexchange.com/questions/422989/scientific-applications-of-the-tikzducks/423094 %
+\RequirePackage{tikzducks}
+% A scientific application %
+\newcommand{\sussyduck}[1]{
+	\duck[body = #1, bill = #1]
+	\def\susscale{0.35}
+	\def\xoffset{2.2}
+	\def\yoffset{-.35}
+	\shade[top color=blue!20, bottom color=blue!20!black]
+	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) .. controls (-3.07*\susscale+\xoffset,6.37*\susscale+\yoffset) and (-4.06*\susscale+\xoffset,6.58*\susscale+\yoffset) ..
+	(-4.61*\susscale+\xoffset,6.37*\susscale+\yoffset) .. controls (-5.15*\susscale+\xoffset,6.16*\susscale+\yoffset) and (-5.44*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
+	(-5.21*\susscale+\xoffset,5.38*\susscale+\yoffset) .. controls (-4.97*\susscale+\xoffset,4.91*\susscale+\yoffset) and (-3.67*\susscale+\xoffset,4.50*\susscale+\yoffset) ..
+	(-3.15*\susscale+\xoffset,4.94*\susscale+\yoffset) .. controls (-2.63*\susscale+\xoffset,5.38*\susscale+\yoffset) and (-2.61*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
+	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) -- cycle;
+	
+}

@@ -1,0 +1,134 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{JesseTeXCV}[2021/12/29 CV expansion for JesseTeX]
+
+
+%% Setup %%
+
+\RequirePackage{JesseTeX}														% What did you expect? It's an expansion for JesseTeX
+\RequirePackage{fontawesome}													% Used for Linkedin and e-mail pictograms
+\RequirePackage{titlesec}														% Used for a custom section title command
+\RequirePackage[skins]{tcolorbox}												% Used for the boxes it the (section) title
+\RequirePackage{helvet}															% This font is easier to read
+\RequirePackage{enumitem}
+\RequirePackage{tabularx}														% Better tabular environment for \leftright
+
+\setlist{nosep}																	% Removes the distance between items in lists
+% Special itemize to be used in tabular environments %
+\newlist{CVitemize}{itemize}{1}
+\setlist[CVitemize]{nosep,before = \vspace{-0.5\baselineskip},label = \textbullet, after = \vspace{-0.8\baselineskip} }
+
+\hypersetup{allcolors = .}														% Removes the ugly colours from hyperlinks
+
+\renewcommand{\familydefault}{\sfdefault}										% Sets the font
+
+% The document's colour theme %
+\gdef \@theme {black}
+\NewDocumentCommand{\setcvtheme}{ m } {
+	% m: mandatory (the colour you want the document to be in)
+	\gdef \@theme {#1}
+}
+
+% Some colours to be used later %
+\gdef \@themesection {\@theme!80!black!80!white}
+\gdef \@themetitle {\@theme!55!black}
+
+
+
+%% Personal details %%
+% All of the details are optional %
+
+
+% Date of birth %
+\gdef \@DoB {}
+\NewDocumentCommand{\dateofbirth}{ m } {
+	% m: mandatory (your date of birth)
+	\gdef \@DoB {\color{\@themetitle}Date of birth: #1}
+}
+
+% LinkedIn page %
+\gdef \@LinkedIn {}
+\NewDocumentCommand{\LinkedIn}{ m } {
+	% m: mandatory (the last part of the url to your LinkedIn page)
+	\gdef \@LinkedIn {\href{https://www.linkedin.com/in/#1/}{\color{\@themetitle}\faLinkedin\ /#1}}
+}
+
+% E-mail address %
+\gdef \@Email {}
+\NewDocumentCommand{\email}{ m } {
+	% m: mandatory (your full e-mail address)
+	\gdef \@Email {\href{mailto:#1}{\color{\@themetitle}\faEnvelope\ #1}}
+}
+
+% Your nationality %
+\gdef \@Nationality {}
+\NewDocumentCommand{\nationality}{ m } {
+	% m: mandatory (your nationality)
+	\gdef \@Nationality {\color{\@themetitle}Nationality: #1}
+}
+
+
+
+%% Layout %%
+
+
+% Title %
+\renewcommand{\maketitle}{
+	\newpage%
+	% Name box %
+	\begin{minipage}[t]{0.75\textwidth}%
+		\textbf{\colorbox{\@themetitle}{\Huge \color{white}\@author} }%
+		\vskip 1em%
+	\end{minipage}%
+	%
+	% Personal details %
+	\begin{minipage}[t]{0.25\textwidth}%
+		\vspace{-\baselineskip}%
+		\tiny%
+		{\@DoB}%
+		\vskip -0.5pt%
+		{\@Email}%
+		\vskip -0.5pt%
+		{\@LinkedIn}%
+		\vskip -0.5pt%
+		{\@Nationality}
+	\end{minipage}%
+	\par%
+	\thispagestyle{plain}%
+}
+
+% Reset header from JesseTeX %
+\fancyhead[R]{}
+\fancyhead[L]{}
+\renewcommand{\headrulewidth}{0pt}
+
+% Define function for the box around the section title %
+\NewDocumentCommand{\sectionbox}{ m }{
+	\begin{tcolorbox}[colback=\@themesection,colframe=\@themesection,hbox, boxrule=0.5pt,arc=4pt, left=5pt,right=5pt,top=5pt,bottom=5pt,boxsep=0pt]
+		\color{white} #1
+	\end{tcolorbox}
+}
+
+% New section format %
+\titleformat{\section}{\vspace{-4pt}\scshape\raggedright\large}{}{0em}{\sectionbox}[
+	%\color{black}\titlerule
+	\vspace{-2.4em}
+]
+
+% Useful command for formatting stuff - you can use the right part to state when you had a certain job %
+\NewDocumentCommand{\leftright}{ m m O{} }{
+	% m: mandatory (the part to be printed on the left)
+	% m: mandatory (the part to be printed on the right)
+	% O{}: optional, defaults to {} (the description on the left)
+	\begin{tabularx}{\textwidth}{X r}
+		#1 & #2\\
+		\ifx#3\empty
+		\else
+		#3 & \\
+		\fi
+	\end{tabularx}
+}
+
+% Was used in the old titleformat for a line under the section name, but is now unused %
+%\let\oldtitleline\titleline
+%\renewcommand{\titleline}{\oldtitleline*}
+%\setlength{\titlewidth}{\textwidth}
