@@ -59,6 +59,13 @@
 	\gdef \@Email {\href{mailto:#1}{\color{\@themetitle}\faEnvelope\ #1}}
 }
 
+% GitHub page %
+\gdef \@GitHub {}
+\NewDocumentCommand{\GitHub}{ m } {
+	% m: mandatory (the last part of the url to your GitHub page)
+	\gdef \@GitHub {\href{https://github.com/#1/}{\color{\@themetitle}\faGithub\ /#1}}
+}
+
 % Your nationality %
 \gdef \@Nationality {}
 \NewDocumentCommand{\nationality}{ m } {
@@ -82,7 +89,7 @@
 	%
 	% Personal details %
 	\begin{minipage}[t]{0.25\textwidth}%
-		\vspace{-\baselineskip}%
+		\vspace{-1.5\baselineskip}%
 		\tiny%
 		{\@DoB}%
 		\vskip -0.5pt%
@@ -90,7 +97,9 @@
 		\vskip -0.5pt%
 		{\@LinkedIn}%
 		\vskip -0.5pt%
-		{\@Nationality}
+		{\@GitHub}%
+		\vskip -0.5pt%
+		{\@Nationality}%
 	\end{minipage}%
 	\par%
 	\thispagestyle{plain}%

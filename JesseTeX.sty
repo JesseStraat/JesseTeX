@@ -31,6 +31,7 @@
 \RequirePackage{ifthen}
 \RequirePackage{xstring}
 \RequirePackage{xparse}
+\RequirePackage{xspace}
 
 % Setting up the options %
 \SetupKeyvalOptions{}
@@ -38,6 +39,8 @@
 	\DeclareStringOption[none]{theme}	% theme = true or theme = false
 	
 	\DeclareStringOption[dutch]{lang}	% Language options
+	
+	\DeclareStringOption[]{numbering}	% Numbering of theorem-like environments
 	
 	\newboolean{count}
 	\setboolean{count}{true}
@@ -64,23 +67,19 @@
 
 %% Setup %%
 
-
-% Theme packages %
-\ifthenelse{\boolean{theme}}{% then
-	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
-	\RequirePackage{hyperref}						% Hyperlinks
-	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
-	\RequirePackage[sorting=none]{biblatex}			% Citations
-}{% else
-}
-
-% Other packages %
+% Base packages %
+\RequirePackage{color}								% Helps with colour definitions
 \RequirePackage[\JesseTeX@lang]{babel}				% Language-related things
 \RequirePackage[utf8]{inputenc}						% Quality of life for easier typing
+%fontenc disabled since it causes issues with hyperref
+%\RequirePackage[T1]{fontenc}						% Fixes some font stuff
 \RequirePackage{graphicx}							% Adding images
-\RequirePackage{amsfonts}							% Some mathematical symbols
+\RequirePackage{amsmath}							% Some mathematical symbols
+\RequirePackage{amsfonts}							% Ditto
 \RequirePackage{amssymb}							% Ditto
 \RequirePackage{mathrsfs}							% Prettier mathscr symbols and the like
+\RequirePackage{tensor}								% A package used for better index notations
+\RequirePackage{slashed}							% For Dirac operators
 \RequirePackage{physics}							% Some mathematical equations
 
 % Fixing some issues in the physics package %
@@ -128,18 +127,29 @@
 }
 %END_FOLD
 
-% Other packages part II %
+% Base packages part II %
 \RequirePackage{mathtools}							% More mathematical symbols, e.g., for proofs
 \RequirePackage{wasysym}							% Ditto
 \RequirePackage{amsthm}								% Theorem environments (for proofs)
+\RequirePackage{thmtools}							% Some tools for defining theorems
 \RequirePackage{lastpage}							% For counting the total amount of pages
 \RequirePackage{textcomp}							% Text symbols
 \RequirePackage{fancyhdr}							% Prettier layout and headers
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
+\RequirePackage{tabularx}							% Allows prettier tabular environments
 \RequirePackage{tikz}								% Lets you draw images
 \RequirePackage{pgfplots}							% Drawing plots (via TikZ)
 \usetikzlibrary{calc}								% Aritmatic in TikZ drawings
 
+% Theme packages %
+\ifthenelse{\boolean{theme}}{% then
+	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
+	\RequirePackage[linkcolor = red]{hyperref}						% Hyperlinks
+	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
+	\RequirePackage[sorting=none]{biblatex}			% Citations
+	\emergencystretch 1em
+}{% else
+}
 
 
 %% Language settings %%
@@ -172,23 +182,25 @@
 }
 
 % Environments for proofs %
-\newtheorem{proposition}{\propo}
-\newtheorem*{proposition*}{\propo}
-
-\newtheorem{lemma}{\lemm}
-\newtheorem*{lemma*}{\lemm}
-
-\newtheorem{definition}{\defin}
-\newtheorem*{definition*}{\defin}
-
-\newtheorem{theorem}{\theor}
-\newtheorem*{theorem*}{\theor}
-
-\newtheorem{claim}{\clai}
-\newtheorem*{claim*}{\clai}
-
-\newtheorem{corollary}{\coro}
-\newtheorem*{corollary*}{\coro}
+\@ifclassloaded{beamer}{}{		%Beamer already loads these environments
+	\newtheorem{proposition}{\propo}[\JesseTeX@numbering]
+	\newtheorem*{proposition*}{\propo}
+	
+	\newtheorem{lemma}[proposition]{\lemm}
+	\newtheorem*{lemma*}{\lemm}
+	
+	\newtheorem{definition}[proposition]{\defin}
+	\newtheorem*{definition*}{\defin}
+	
+	\newtheorem{theorem}[proposition]{\theor}
+	\newtheorem*{theorem*}{\theor}
+	
+	\newtheorem{claim}[proposition]{\clai}
+	\newtheorem*{claim*}{\clai}
+	
+	\newtheorem{corollary}[proposition]{\coro}
+	\newtheorem*{corollary*}{\coro}
+}
 
 % Deprecated environments %
 \newtheorem{prop}{\propo}	%Proposition
@@ -317,7 +329,7 @@
 			% Author table %
 			{\large%
 				\lineskip .5em%
-				\begin{tabular}[t]{c}%
+				\begin{tabular}{c}%
 					\@author%
 				\end{tabular}\par%
 			}%
