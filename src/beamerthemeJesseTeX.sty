@@ -1,57 +1,20 @@
-% Copyright (C) 2007-2015 TeXniCie A-Eskwadraat <hektex@a-eskwadraat.nl>
-%
-% This file is part of the A-Eskwadraat LaTeX collection and may be
-% redistributed under the terms of version 2 of the GNU General Public License
-% as published by the Free Software Foundation. See LICENSE file for details.
-%
-%% $Id: beamerthemeaes2.sty 733 2015-02-23 14:38:43Z aldo $
-
-
-%%A JesseTeX original adapted from the A-Eskwadraat default
-
-
-\RequirePackage{ifthen}
-\RequirePackage{calc}
-\RequirePackage{pgfpages}
-\RequirePackage{tikz}
-\RequirePackage{xparse}
-\usepackage{epstopdf}
-\usepackage[scale=0.9]{merriweather}
-\usefonttheme{professionalfonts}
-\epstopdfDeclareGraphicsRule{.ai}{pdf}{.pdf}{ps2pdf14 #1 \OutputFile}
-
-
-% Presentation theme
+% The basic beamer theme
 \usetheme{Frankfurt}
-% Color theme modifications
+\useinnertheme{rectangles}													% Rectangles in itemizations
+\setbeamertemplate{mini frames}[box]										% Boxes in miniframes (slides on top)
+
+% Color theme and modifications
 \definecolor{stylecolour}{RGB}{255,205,0}
-\NewDocumentCommand{\declarecolour}{ m }{
+\NewDocumentCommand{\setstylecolour}{ m }{
 	\definecolor{stylecolour}{RGB}{#1}
 }
-
 \setbeamercolor{structure}{fg=stylecolour}
-\newlength{\progressbarlength}
-% Inner theme modifications
-\useinnertheme{rectangles}
-% Outer theme modifications
-\setbeamertemplate{mini frames}[box]
-\defbeamertemplate*{footline}{JesseTeX theme}
-{%
-	\pgfdeclarehorizontalshading{aes@progressbar}{2ex}{%
-		color(0ex)=(stylecolour);%
-		color(0.3in)=(white)%
-	}%
-	\leavevmode%
-	% herbereken progressbar length
-	\setlength{\progressbarlength}{\paperwidth/\maxof{\inserttotalframenumber}{\insertframenumber}*\insertframenumber}%
-	\begin{beamercolorbox}[wd=\progressbarlength,ht=2ex]{frametitle}%
-	\end{beamercolorbox}%
-	\begin{beamercolorbox}[wd=0.3in,ht=2ex]{frametitle}%
-		\pgfuseshading{aes@progressbar}%
-	\end{beamercolorbox}%
-	\vskip0pt%
-}
-% Default logo
+% Packages
+\RequirePackage{tikz}														% For drawing things on the slides
+\RequirePackage[scale=0.9]{merriweather}									% A nicer font for presentations
+\usefonttheme{professionalfonts}											% Use of normal LaTeX font in equations
+
+% Logo in bottom right
 \NewDocumentCommand{\declarelogo}{ m }{
 	\ifthenelse{\equal{#1}{}}{
 		\pgfdeclareimage[width = 25mm]{logo}{JesseTeX/images/UU_logo.jpg}	
@@ -61,25 +24,7 @@
 	\logo{\tikz\node[opacity = 0.35] {\pgfuseimage{logo}};}
 }
 
-% Progressbar configuration
-\newlength{\aes@step}
-\setlength{\aes@step}{0pt}
-\AtEndDocument{
-	\newcounter{aes@upc}
-	\setcounter{aes@upc}{1}
-	\newlength{\aes@pagelen}
-	\setlength{\aes@pagelen}{\inserttotalframenumber\unitlength}
-	\whiledo{\lengthtest{\theaes@upc\aes@pagelen<\paperwidth}}{\stepcounter{aes@upc}}
-	\setlength{\aes@step}{\theaes@upc\unitlength}
-	\if@filesw
-	\immediate\write\@auxout{\string\@writefile{nav}%
-		{\noexpand\headcommand{\noexpand\setlength{\noexpand\aes@step}{\the\aes@step}}}}
-	\fi
-}
-
-
-%Title page
-
+% Title page
 \setbeamertemplate{title page}{%
 	\begin{tikzpicture}
 		\draw [white, opacity = 0] ([yshift = -0.2in]current page.north west) rectangle (current page.south east);
@@ -91,7 +36,7 @@
 	\end{tikzpicture}
 }
 
-
+% Section pages
 \AtBeginSection[]{
 	{
 		\miniframesoff
@@ -119,29 +64,7 @@
 	}
 }
 
-% \AtBeginSection[]{
-% 	\begin{frame}
-% 		\vfill
-% 		\centering
-% 		\begin{beamercolorbox}[sep=8pt,center,shadow=false,rounded=true]{title}
-% 			\usebeamerfont{title}\insertsectionhead\par%
-% 		\end{beamercolorbox}
-% 		\vfill
-% 	\end{frame}
-% }
-
-% \AtBeginSubsection[]{
-% 	\begin{frame}
-% 		\vfill
-% 		\centering
-% 		\begin{beamercolorbox}[sep=8pt,center,shadow=false,rounded=true]{title}
-% 			\usebeamerfont{title}\insertsectionhead\par%
-% 		\end{beamercolorbox}
-% 		\usebeamerfont{title}\insertsubsectionhead\par%
-% 		\vfill
-% 	\end{frame}
-% }
-
+% Question page
 \NewDocumentCommand{\questionframe}{}{%
 	{
 		\miniframesoff
@@ -158,12 +81,14 @@
 	}
 }
 
+% Useful parameters
 \newcommand{\nologo}{\setbeamertemplate{logo}{}}
 \setbeamercolor{block title}{bg=stylecolour}
 \setbeamercolor{block body}{bg=stylecolour!30}
 \setbeamertemplate{blocks}[default]
 
 
+% Commands for disabling the blocks at the top
 \makeatletter
 \let\beamer@writeslidentry@miniframeson=\beamer@writeslidentry
 \def\beamer@writeslidentry@miniframesoff{%
@@ -173,7 +98,7 @@
 		\clearpage\beamer@notesactions%
 	}
 }
-%De volgende commands laten je bepaalde frames niet meetellen met die blokjes bovenaan
+
 \newcommand*{\miniframeson}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframeson}
 \newcommand*{\miniframesoff}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframesoff}
 \makeatother
