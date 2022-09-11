@@ -2,14 +2,15 @@
 \usetheme{Frankfurt}
 % Color theme and modifications
 \definecolor{stylecolour}{RGB}{255,205,0}
-\NewDocumentCommand{\declarecolour}{ m }{
+\NewDocumentCommand{\setstylecolour}{ m }{
 	\definecolor{stylecolour}{RGB}{#1}
 }
 \setbeamercolor{structure}{fg=stylecolour}
 
 % Packages
-\RequirePackage{tikz}
-\RequirePackage[scale=0.9]{merriweather}
+\RequirePackage{tikz}														% For drawing things on the slides
+\RequirePackage[scale=0.9]{merriweather}									% A nicer font for presentations
+\usefonttheme{professionalfonts}											% Use of normal LaTeX font in equations
 
 % Logo in bottom right
 \NewDocumentCommand{\declarelogo}{ m }{
