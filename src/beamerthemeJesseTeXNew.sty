@@ -1,4 +1,11 @@
+% The basic beamer theme
 \usetheme{Frankfurt}
+% Color theme and modifications
+\definecolor{stylecolour}{RGB}{255,205,0}
+\NewDocumentCommand{\declarecolour}{ m }{
+	\definecolor{stylecolour}{RGB}{#1}
+}
+\setbeamercolor{structure}{fg=stylecolour}
 
 % Packages
 \RequirePackage{tikz}
