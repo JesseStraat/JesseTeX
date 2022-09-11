@@ -1,12 +1,14 @@
 % The basic beamer theme
 \usetheme{Frankfurt}
+\useinnertheme{rectangles}													% Rectangles in itemizations
+\setbeamertemplate{mini frames}[box]										% Boxes in miniframes (slides on top)
+
 % Color theme and modifications
 \definecolor{stylecolour}{RGB}{255,205,0}
 \NewDocumentCommand{\setstylecolour}{ m }{
 	\definecolor{stylecolour}{RGB}{#1}
 }
 \setbeamercolor{structure}{fg=stylecolour}
-
 % Packages
 \RequirePackage{tikz}														% For drawing things on the slides
 \RequirePackage[scale=0.9]{merriweather}									% A nicer font for presentations
