@@ -127,32 +127,42 @@
 		{\fractype{\partial^2 #3}{\partial #4 \partial #5}\IfValueT{#6}{(#6)}}
 	}
 }
-\DeclareDocumentCommand\bra{ s m t\ket s g }
+\DeclareDocumentCommand\leftsubs{ o m }
+{ % Left subscript
+	\IfNoValueTF{#1}
+	{
+		#2
+	}
+	{
+		{\vphantom{#2}}_{#1}{#2}
+	}
+}
+\DeclareDocumentCommand\bra{ s o m t\ket s g }
 { % Bra
-	\IfBooleanTF{#3}
+	\IfBooleanTF{#4}
 	{ % Contraction
 		\IfBooleanTF{#1}
 		{ % Bra has a star: no resize
-			\IfNoValueTF{#5}
-			{\braket*{#2}{} \IfBooleanTF{#4}{*}{}}
-			{\braket*{#2}{#5}}
+			\IfNoValueTF{#6}
+			{\braket*{#3}{} \IfBooleanTF{#5}{*}{}}
+			{\braket*{#3}{#6}}
 		}
 		{
-			\IfBooleanTF{#4}
+			\IfBooleanTF{#5}
 			{ % Ket has a star: no resize
-				\IfNoValueTF{#5}
-				{\braket{#2}{} *}
-				{\braket*{#2}{#5}}
+				\IfNoValueTF{#6}
+				{\braket{#3}{} *}
+				{\braket*{#3}{#6}}
 			}
-			{\braket{#2}{\IfNoValueTF{#5}{}{#5}}} % Neither term is starred: auto sizing
+			{\braket{#3}{\IfNoValueTF{#6}{}{#6}}} % Neither term is starred: auto sizing
 		}
 	}
 	{ % No contraction
 		\IfBooleanTF{#1}
-		{\vphantom{#2}\left\langle\smash{#2}\right\rvert}
-		{\left\langle{#2}\right\rvert}
-		\IfBooleanTF{#4}{*}{}
-		\IfNoValueTF{#5}{}{#5}
+		{\vphantom{#3}\left\langle\smash{#3}\right\rvert}
+		{\left\langle{#3}\right\rvert}
+		\IfBooleanTF{#5}{*}{}
+		\IfNoValueTF{#6}{}{#6}
 	}
 }
 %END_FOLD
