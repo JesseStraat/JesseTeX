@@ -127,6 +127,34 @@
 		{\fractype{\partial^2 #3}{\partial #4 \partial #5}\IfValueT{#6}{(#6)}}
 	}
 }
+\DeclareDocumentCommand\bra{ s m t\ket s g }
+{ % Bra
+	\IfBooleanTF{#3}
+	{ % Contraction
+		\IfBooleanTF{#1}
+		{ % Bra has a star: no resize
+			\IfNoValueTF{#5}
+			{\braket*{#2}{} \IfBooleanTF{#4}{*}{}}
+			{\braket*{#2}{#5}}
+		}
+		{
+			\IfBooleanTF{#4}
+			{ % Ket has a star: no resize
+				\IfNoValueTF{#5}
+				{\braket{#2}{} *}
+				{\braket*{#2}{#5}}
+			}
+			{\braket{#2}{\IfNoValueTF{#5}{}{#5}}} % Neither term is starred: auto sizing
+		}
+	}
+	{ % No contraction
+		\IfBooleanTF{#1}
+		{\vphantom{#2}\left\langle\smash{#2}\right\rvert}
+		{\left\langle{#2}\right\rvert}
+		\IfBooleanTF{#4}{*}{}
+		\IfNoValueTF{#5}{}{#5}
+	}
+}
 %END_FOLD
 
 % Base packages part II %
