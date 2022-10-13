@@ -138,7 +138,7 @@
 	}
 }
 \DeclareDocumentCommand\bra{ s o m t\ket s g }
-{ % Bra
+{ % Bra but with a possible subscript to the left
 	\leftsubs[#2]
 	{
 		\IfBooleanTF{#4}
