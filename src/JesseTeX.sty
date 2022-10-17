@@ -156,27 +156,27 @@
 }
 \DeclareDocumentCommand\bra{ s o m t\ket s g }
 { % Bra but with a possible subscript to the left
-	\leftsubs[#2]
-	{
-		\IfBooleanTF{#4}
-		{ % Contraction
-			\IfBooleanTF{#1}
-			{ % Bra has a star: no resize
-				\IfNoValueTF{#6}
-				{\braket*{#3}{} \IfBooleanTF{#5}{*}{}}
-				{\braket*{#3}{#6}}
-			}
-			{
-				\IfBooleanTF{#5}
-				{ % Ket has a star: no resize
-					\IfNoValueTF{#6}
-					{\braket{#3}{} *}
-					{\braket*{#3}{#6}}
-				}
-				{\braket{#3}{\IfNoValueTF{#6}{}{#6}}} % Neither term is starred: auto sizing
-			}
+	\IfBooleanTF{#4}
+	{ % Contraction
+		\IfBooleanTF{#1}
+		{ % Bra has a star: no resize
+			\IfNoValueTF{#6}
+			{\braket*[#2]{#3}{} \IfBooleanTF{#5}{*}{}}
+			{\braket*[#2]{#3}{#6}}
 		}
-		{ % No contraction
+		{
+			\IfBooleanTF{#5}
+			{ % Ket has a star: no resize
+				\IfNoValueTF{#6}
+				{\braket[#2]{#3}{} *}
+				{\braket*[#2]{#3}{#6}}
+			}
+			{\braket[#2]{#3}{\IfNoValueTF{#6}{}{#6}}} % Neither term is starred: auto sizing
+		}
+	}
+	{ % No contraction
+		\leftsubs[#2]
+		{
 			\IfBooleanTF{#1}
 			{\vphantom{#3}\left\langle\smash{#3}\right\rvert}
 			{\left\langle{#3}\right\rvert}
