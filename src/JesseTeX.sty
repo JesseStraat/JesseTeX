@@ -144,13 +144,21 @@
 		\IfBooleanTF{#1}
 		{ % No resize
 			\IfNoValueTF{#4}
-			{\vphantom{#3}\left\langle\smash{#3}\middle\vert\smash{#3}\right\rangle}
-			{\vphantom{#3#4}\left\langle\smash{#3}\middle\vert\smash{#4}\right\rangle}
+			{
+				\vphantom{#3}\left\langle\smash{#3}\middle\vert\smash{#3}\right\rangle
+			}
+			{
+				\vphantom{#3#4}\left\langle\smash{#3}\middle\vert\smash{#4}\right\rangle
+			}
 		}
 		{ % Auto resize
 			\IfNoValueTF{#4}
-			{\left\langle{#3}\middle\vert{#3}\right\rangle}
-			{\left\langle{#3}\middle\vert{#4}\right\rangle}
+			{
+				\left\langle{#3}\middle\vert{#3}\right\rangle
+			}
+			{
+				\left\langle{#3}\middle\vert{#4}\right\rangle
+			}
 		}
 	}
 }
@@ -161,25 +169,39 @@
 		\IfBooleanTF{#1}
 		{ % Bra has a star: no resize
 			\IfNoValueTF{#6}
-			{\braket*[#2]{#3}{} \IfBooleanTF{#5}{*}{}}
-			{\braket*[#2]{#3}{#6}}
+			{
+				\braket*[#2]{#3}{} \IfBooleanTF{#5}{*}{}
+			}
+			{
+				\braket*[#2]{#3}{#6}
+			}
 		}
 		{
 			\IfBooleanTF{#5}
 			{ % Ket has a star: no resize
 				\IfNoValueTF{#6}
-				{\braket[#2]{#3}{} *}
-				{\braket*[#2]{#3}{#6}}
+				{
+					\braket[#2]{#3}{} *
+				}
+				{
+					\braket*[#2]{#3}{#6}
+				}
 			}
-			{\braket[#2]{#3}{\IfNoValueTF{#6}{}{#6}}} % Neither term is starred: auto sizing
+			{ % Neither term is starred: auto sizing
+				\braket[#2]{#3}{\IfNoValueTF{#6}{}{#6}}
+			}
 		}
 	}
 	{ % No contraction
 		\leftsubs[#2]
 		{
 			\IfBooleanTF{#1}
-			{\vphantom{#3}\left\langle\smash{#3}\right\rvert}
-			{\left\langle{#3}\right\rvert}
+			{
+				\vphantom{#3}\left\langle\smash{#3}\right\rvert
+			}
+			{
+				\left\langle{#3}\right\rvert
+			}
 			\IfBooleanTF{#5}{*}{}
 			\IfNoValueTF{#6}{}{#6}
 		}
