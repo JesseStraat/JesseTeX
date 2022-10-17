@@ -134,7 +134,24 @@
 		#2
 	}
 	{
-		{\vphantom{#2}}_{#1}{#2}
+		\,{\vphantom{#2}}_{#1}{#2}
+	}
+}
+\DeclareDocumentCommand\innerproduct{ s o m g }
+{ % Inner product
+	\leftsubs[#2]
+	{
+		\IfBooleanTF{#1}
+		{ % No resize
+			\IfNoValueTF{#4}
+			{\vphantom{#3}\left\langle\smash{#3}\middle\vert\smash{#3}\right\rangle}
+			{\vphantom{#3#4}\left\langle\smash{#3}\middle\vert\smash{#4}\right\rangle}
+		}
+		{ % Auto resize
+			\IfNoValueTF{#4}
+			{\left\langle{#3}\middle\vert{#3}\right\rangle}
+			{\left\langle{#3}\middle\vert{#4}\right\rangle}
+		}
 	}
 }
 \DeclareDocumentCommand\bra{ s o m t\ket s g }
