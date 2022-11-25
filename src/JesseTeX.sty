@@ -244,7 +244,8 @@
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
 \RequirePackage{tabularx}							% Allows prettier tabular environments
 \RequirePackage{tikz}								% Lets you draw images
-\RequirePackage{pgfplots}							% Drawing plots (via TikZ)
+% pgfplots has been removed to avoid compatibility issues
+% \RequirePackage{pgfplots}							% Drawing plots (via TikZ)
 \usetikzlibrary{calc}								% Aritmatic in TikZ drawings
 
 % Theme packages %
@@ -253,6 +254,7 @@
 	\RequirePackage[linkcolor = red]{hyperref}						% Hyperlinks
 	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
 	\RequirePackage[sorting=none]{biblatex}			% Citations
+	\RequirePackage{csquotes}						% Recommended for citation typesetting
 	\emergencystretch 1em
 }{% else
 }
@@ -421,6 +423,8 @@
 	\end{tabular}}
 	% Adding the page number to the bottom %
 	\fancyfoot[C]{\thepage}
+	% Changing headheight to fit what's inside %
+	\setlength{\headheight}{24pt}
 	
 	% New title function %
 	\renewcommand{\maketitle}{
