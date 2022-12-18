@@ -70,9 +70,6 @@
 % Base packages %
 \RequirePackage{color}								% Helps with colour definitions
 \RequirePackage[\JesseTeX@lang]{babel}				% Language-related things
-\RequirePackage[utf8]{inputenc}						% Quality of life for easier typing
-%fontenc disabled since it causes issues with hyperref
-%\RequirePackage[T1]{fontenc}						% Fixes some font stuff
 \RequirePackage{graphicx}							% Adding images
 \usepackage{caption}								% Used primarily for subfigures
 \usepackage{subcaption}								% Ditto
@@ -253,7 +250,13 @@
 	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
 	\RequirePackage[linkcolor = red]{hyperref}						% Hyperlinks
 	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
-	\RequirePackage[sorting=none]{biblatex}			% Citations
+	\RequirePackage[
+		backend=biber,
+		sorting=none,
+		style=phys,
+		%urldate=iso,
+		%date=iso
+		]{biblatex}			% Citations
 	\RequirePackage{csquotes}						% Recommended for citation typesetting
 	\emergencystretch 1em
 }{% else
