@@ -70,9 +70,6 @@
 % Base packages %
 \RequirePackage{color}								% Helps with colour definitions
 \RequirePackage[\JesseTeX@lang]{babel}				% Language-related things
-\RequirePackage[utf8]{inputenc}						% Quality of life for easier typing
-%fontenc disabled since it causes issues with hyperref
-%\RequirePackage[T1]{fontenc}						% Fixes some font stuff
 \RequirePackage{graphicx}							% Adding images
 \usepackage{caption}								% Used primarily for subfigures
 \usepackage{subcaption}								% Ditto
@@ -253,7 +250,13 @@
 	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
 	\RequirePackage[linkcolor = red]{hyperref}						% Hyperlinks
 	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
-	\RequirePackage[sorting=none]{biblatex}			% Citations
+	\RequirePackage[
+		backend=biber,
+		sorting=none,
+		style=phys,
+		%urldate=iso,
+		%date=iso
+		]{biblatex}			% Citations
 	\RequirePackage{csquotes}						% Recommended for citation typesetting
 	\emergencystretch 1em
 }{% else
@@ -323,8 +326,6 @@
 \newtheorem*{cor*}{\coro}
 
 
-% Some new symbols
-\DeclareUnicodeCharacter{20AC}{\euro{}}				% Might be deprecated
 % Swapping \epsilon and \varepsilon %
 \let\temp\epsilon
 \let\epsilon\varepsilon
@@ -343,7 +344,15 @@
 
 
 
-%% Field-specific macros %%
+%% Macros %%
+
+\NewDocumentCommand{\cleartooddpage}{}{
+	\clearpage
+	\ifodd\value{page}\else\null\clearpage\fi
+}
+\NewDocumentCommand{\numberthis}{}{
+	\addtocounter{equation}{1}\tag{\theequation}
+}
 
 
 % Some probability stuff %
