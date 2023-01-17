@@ -89,7 +89,6 @@
 
 
 % Commands for disabling the blocks at the top
-\makeatletter
 \let\beamer@writeslidentry@miniframeson=\beamer@writeslidentry
 \def\beamer@writeslidentry@miniframesoff{%
 	\expandafter\beamer@ifempty\expandafter{\beamer@framestartpage}{}% does not happen normally
@@ -101,11 +100,9 @@
 
 \newcommand*{\miniframeson}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframeson}
 \newcommand*{\miniframesoff}{\let\beamer@writeslidentry=\beamer@writeslidentry@miniframesoff}
-\makeatother
 
 
 % Makes \pause work in align environment
-\makeatletter
 \renewrobustcmd{\beamer@@pause}[1][]{%
 	\unless\ifmeasuring@%
 	\ifblank{#1}%
@@ -114,4 +111,3 @@
 	\onslide<\value{beamerpauses}->\relax%
 	\fi%
 }
-\makeatother

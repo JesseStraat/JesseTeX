@@ -334,6 +334,8 @@
 \let\temp\phi
 \let\phi\varphi
 \let\varphi\temp
+% Adding \vu as alternative to \nu (for people who actually speak Greek)
+\let\vu\nu
 % Some sets %
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -352,6 +354,19 @@
 }
 \NewDocumentCommand{\numberthis}{}{
 	\addtocounter{equation}{1}\tag{\theequation}
+}
+
+\let\@quad\quad										% Temporary quad function
+% #1(number) = number of quads
+\RenewDocumentCommand{\quad}{ !O{1} }{%
+	\IfInteger{#1}{%
+		\foreach \x in {1,...,#1}{%
+			\@quad%
+		}%
+		\/											% For some reason, this command eats the first next symbol
+	}{%												% Therefore, a \/ has been inserted.
+		\PackageError{JesseTeX}{#1 is not an integer}{Try using an integer}
+	}%
 }
 
 
