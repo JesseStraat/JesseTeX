@@ -454,9 +454,14 @@
 	\setlength{\headheight}{24pt}
 	
 	% New title function %
+	\newcounter{old@footnote}
 	\renewcommand{\maketitle}{
 		\newpage%
 		\null%
+		\setcounter{old@footnote}{\value{footnote}}%
+		\setcounter{footnote}{0}%
+		\let\old@thefootnote\thefootnote%
+		\renewcommand\thefootnote{\@fnsymbol\c@footnote}
 		%\vskip 2em%				%The title takes enough space already, so I chose to disable this
 		\begin{center}%
 			\let \footnote \thanks%
@@ -485,7 +490,11 @@
 		\end{center}%
 		\par%
 		\vskip 1.5em%
-		\thispagestyle{plain}}%	%Resets page style to not include header
+		\@thanks
+		\thispagestyle{plain}	%Resets page style to not include header
+		\let\thefootnote\old@thefootnote
+		\setcounter{footnote}{\value{old@footnote}}
+		}%
 }{%else
 	% Redefines authand so the document doesn't break if you switch from theme to notheme %
 	\def\authand{\and}
