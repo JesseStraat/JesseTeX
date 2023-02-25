@@ -438,12 +438,13 @@
 	% Pretty pagestyle %
 	\pagestyle{fancy}\fancyhf{}
 	% Adding authors to the top right %
-	\fancyhead[R]{\begin{tabular}{c}
-			\let\@thanksold\thanks
-			\renewcommand{\thanks}[1]{}
+	\fancyhead[R]{
+		\let\@thanksold\thanks
+		\renewcommand{\thanks}[1]{}
+		\begin{tabular}{c}
 			\@author
-			\let\thanks\@thanksold
-	\end{tabular}}
+		\end{tabular}
+		\let\thanks\@thanksold}
 	% Adding the title to the top left %
 	\fancyhead[L]{\begin{tabular}{l}
 			\@title
