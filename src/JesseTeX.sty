@@ -345,7 +345,7 @@
 \newcommand{\Q}{\mathbb{Q}}
 \newcommand{\K}{\mathbb{K}}
 \newcommand{\bP}{\mathbb{P}}
-\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\Id}{\operatorname{Id}}
 
 
 
@@ -383,10 +383,10 @@
 	\mathbb{E}^{ #2 }\left[ #1 \right]
 }
 \NewDocumentCommand{\vari}{ m } {					% Variance of a variable
-	\mathrm{Var}\left( #1 \right)
+	\operatorname{Var}\left( #1 \right)
 }
 \NewDocumentCommand{\mse}{ m } {					% Mean squared error of a variable
-	\mathrm{MSE}\left( #1 \right)
+	\operatorname{MSE}\left( #1 \right)
 }
 % Deprecated macros for a course in probability and statistics %
 \newcommand{\convp}{\overset{p}{\to}}
@@ -411,7 +411,7 @@
 %BEGIN_FOLD
 % Set interior %
 \NewDocumentCommand{\intr}{ m } {
-	\ \mathrm{Int}\mathopen{}\mathclose\bgroup\left( #1 \aftergroup\egroup\right)
+	\ \operatorname{Int}\left( #1 \right)
 }
 %END_FOLD
 
