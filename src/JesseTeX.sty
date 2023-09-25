@@ -80,164 +80,11 @@
 \RequirePackage{tensor}								% A package used for better index notations
 \RequirePackage{slashed}							% For Dirac operators
 \RequirePackage{physics}							% Some mathematical equations
-
-% Fixing some issues in the physics package %
-%BEGIN_FOLD
-\DeclareDocumentCommand\derivative{ s o m g d() }
-{ % Total derivative
-	% s: star for \flatfrac flat derivative
-	% o: optional n for nth derivative
-	% m: mandatory (x in df/dx)
-	% g: optional (f in df/dx)
-	% d: long-form d/dx(...)
-	\IfBooleanTF{#1}
-	{\let\fractype\flatfrac}
-	{\let\fractype\frac}
-	\IfNoValueTF{#4}
-	{
-		\IfNoValueTF{#5}
-		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
-	}
-	{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
-}
-\DeclareDocumentCommand\partialderivative{ s o m g g d() }
-{ % Partial derivative
-	% s: star for \flatfrac flat derivative
-	% o: optional n for nth derivative
-	% m: mandatory (x in df/dx)
-	% g: optional (f in df/dx)
-	% g: optional (y in d^2f/dxdy)
-	% d: long-form d/dx(...)
-	\IfBooleanTF{#1}
-	{\let\fractype\flatfrac}
-	{\let\fractype\frac}
-	\IfNoValueTF{#4}
-	{
-		\IfNoValueTF{#6}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#6\argclose)}
-	}
-	{
-		\IfNoValueTF{#5}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}} #3}{\partial #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#6}{(#6)}}
-		{\fractype{\partial^2 #3}{\partial #4 \partial #5}\IfValueT{#6}{(#6)}}
-	}
-}
-\DeclareDocumentCommand\leftsubs{ o m }
-{ % Left subscript
-	\IfNoValueTF{#1}
-	{
-		#2
-	}
-	{
-		\mkern\thinmuskip {\vphantom{#2}}_{#1}{#2}
-	}
-}
-\DeclareDocumentCommand\innerproduct{ s o m o g }
-{ % Inner product
-	\leftsubs[#2]
-	{
-		\IfBooleanTF{#1}
-		{ % No resize
-			\IfNoValueTF{#5}
-			{
-				\IfNoValueTF{#4}
-				{
-					\vphantom{#3}\left\langle\smash{#3}\middle\vert\smash{#3}\right\rangle
-				}
-				{
-					\vphantom{#3#4}\left\langle\smash{#3}\middle\vert{#4}\middle\vert\smash{#3}\right\rangle
-				}
-			}
-			{
-				\IfNoValueTF{#4}
-				{
-					\vphantom{#3#5}\left\langle\smash{#3}\middle\vert\smash{#5}\right\rangle
-				}
-				{
-					\vphantom{#3#4#5}\left\langle\smash{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert\smash{#5}\right\rangle
-				}
-			}
-		}
-		{ % Auto resize
-			\IfNoValueTF{#5}
-			{
-				\IfNoValueTF{#4}
-				{
-					\left\langle{#3}\middle\vert{#3}\right\rangle
-				}
-				{
-					\left\langle{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert{#3}\right\rangle
-				}
-			}
-			{
-				\IfNoValueTF{#4}
-				{
-					\left\langle{#3}\middle\vert{#5}\right\rangle
-				}
-				{
-					\left\langle{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert{#5}\right\rangle
-				}
-			}
-		}
-	}
-}
-\DeclareDocumentCommand\bra{ s o m t\ket s g }
-{ % Bra but with a possible subscript to the left
-	\IfBooleanTF{#4}
-	{ % Contraction
-		\IfBooleanTF{#1}
-		{ % Bra has a star: no resize
-			\IfNoValueTF{#6}
-			{
-				\braket*[#2]{#3}{} \IfBooleanTF{#5}{*}{}
-			}
-			{
-				\braket*[#2]{#3}{#6}
-			}
-		}
-		{
-			\IfBooleanTF{#5}
-			{ % Ket has a star: no resize
-				\IfNoValueTF{#6}
-				{
-					\braket[#2]{#3}{} *
-				}
-				{
-					\braket*[#2]{#3}{#6}
-				}
-			}
-			{ % Neither term is starred: auto sizing
-				\braket[#2]{#3}{\IfNoValueTF{#6}{}{#6}}
-			}
-		}
-	}
-	{ % No contraction
-		\leftsubs[#2]
-		{
-			\IfBooleanTF{#1}
-			{
-				\vphantom{#3}\left\langle\smash{#3}\right\rvert
-			}
-			{
-				\left\langle{#3}\right\rvert
-			}
-			\IfBooleanTF{#5}{*}{}
-			\IfNoValueTF{#6}{}{#6}
-		}
-	}
-}
-%END_FOLD
-
-% Base packages part II %
 \RequirePackage{mathtools}							% More mathematical symbols, e.g., for proofs
 \RequirePackage{wasysym}							% Ditto
 \RequirePackage{amsthm}								% Theorem environments (for proofs)
 \RequirePackage{thmtools}							% Some tools for defining theorems
-\RequirePackage{lastpage}							% For counting the total amount of pages
 \RequirePackage{textcomp}							% Text symbols
-\RequirePackage{fancyhdr}							% Prettier layout and headers
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
 \RequirePackage{tabularx}							% Allows prettier tabular environments
 \RequirePackage{tikz}								% Lets you draw images
@@ -248,6 +95,7 @@
 
 % Theme packages %
 \ifthenelse{\boolean{theme}}{% then
+	\RequirePackage{fancyhdr}							% Prettier layout and headers
 	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
 	\RequirePackage[linkcolor = red]{hyperref}						% Hyperlinks
 	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
@@ -259,8 +107,15 @@
 		%date=iso
 		]{biblatex}			% Citations
 	\RequirePackage{csquotes}						% Recommended for citation typesetting
+	\RequirePackage{lastpage}							% For counting the total amount of pages
 	\emergencystretch 1em
 }{% else
+}
+
+
+%% Import JesseTeX libraries
+\newcommand{\importjesselibrary}[1]{%
+	\usepackage{JesseTeX/src/libraries/JesseTeX-#1}
 }
 
 
