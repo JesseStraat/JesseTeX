@@ -79,193 +79,35 @@
 \RequirePackage{mathrsfs}							% Prettier mathscr symbols and the like
 \RequirePackage{tensor}								% A package used for better index notations
 \RequirePackage{slashed}							% For Dirac operators
-\RequirePackage{physics}							% Some mathematical equations
-
-% Fixing some issues in the physics package %
-%BEGIN_FOLD
-\DeclareDocumentCommand\derivative{ s o m g d() }
-{ % Total derivative
-	% s: star for \flatfrac flat derivative
-	% o: optional n for nth derivative
-	% m: mandatory (x in df/dx)
-	% g: optional (f in df/dx)
-	% d: long-form d/dx(...)
-	\IfBooleanTF{#1}
-	{\let\fractype\flatfrac}
-	{\let\fractype\frac}
-	\IfNoValueTF{#4}
-	{
-		\IfNoValueTF{#5}
-		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
-	}
-	{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
-}
-\DeclareDocumentCommand\partialderivative{ s o m g g d() }
-{ % Partial derivative
-	% s: star for \flatfrac flat derivative
-	% o: optional n for nth derivative
-	% m: mandatory (x in df/dx)
-	% g: optional (f in df/dx)
-	% g: optional (y in d^2f/dxdy)
-	% d: long-form d/dx(...)
-	\IfBooleanTF{#1}
-	{\let\fractype\flatfrac}
-	{\let\fractype\frac}
-	\IfNoValueTF{#4}
-	{
-		\IfNoValueTF{#6}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#6\argclose)}
-	}
-	{
-		\IfNoValueTF{#5}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}} #3}{\partial #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#6}{(#6)}}
-		{\fractype{\partial^2 #3}{\partial #4 \partial #5}\IfValueT{#6}{(#6)}}
-	}
-}
-\DeclareDocumentCommand\leftsubs{ o m }
-{ % Left subscript
-	\IfNoValueTF{#1}
-	{
-		#2
-	}
-	{
-		\mkern\thinmuskip {\vphantom{#2}}_{#1}{#2}
-	}
-}
-\DeclareDocumentCommand\innerproduct{ s o m o g }
-{ % Inner product
-	\leftsubs[#2]
-	{
-		\IfBooleanTF{#1}
-		{ % No resize
-			\IfNoValueTF{#5}
-			{
-				\IfNoValueTF{#4}
-				{
-					\vphantom{#3}\left\langle\smash{#3}\middle\vert\smash{#3}\right\rangle
-				}
-				{
-					\vphantom{#3#4}\left\langle\smash{#3}\middle\vert{#4}\middle\vert\smash{#3}\right\rangle
-				}
-			}
-			{
-				\IfNoValueTF{#4}
-				{
-					\vphantom{#3#5}\left\langle\smash{#3}\middle\vert\smash{#5}\right\rangle
-				}
-				{
-					\vphantom{#3#4#5}\left\langle\smash{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert\smash{#5}\right\rangle
-				}
-			}
-		}
-		{ % Auto resize
-			\IfNoValueTF{#5}
-			{
-				\IfNoValueTF{#4}
-				{
-					\left\langle{#3}\middle\vert{#3}\right\rangle
-				}
-				{
-					\left\langle{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert{#3}\right\rangle
-				}
-			}
-			{
-				\IfNoValueTF{#4}
-				{
-					\left\langle{#3}\middle\vert{#5}\right\rangle
-				}
-				{
-					\left\langle{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert{#5}\right\rangle
-				}
-			}
-		}
-	}
-}
-\DeclareDocumentCommand\bra{ s o m t\ket s g }
-{ % Bra but with a possible subscript to the left
-	\IfBooleanTF{#4}
-	{ % Contraction
-		\IfBooleanTF{#1}
-		{ % Bra has a star: no resize
-			\IfNoValueTF{#6}
-			{
-				\braket*[#2]{#3}{} \IfBooleanTF{#5}{*}{}
-			}
-			{
-				\braket*[#2]{#3}{#6}
-			}
-		}
-		{
-			\IfBooleanTF{#5}
-			{ % Ket has a star: no resize
-				\IfNoValueTF{#6}
-				{
-					\braket[#2]{#3}{} *
-				}
-				{
-					\braket*[#2]{#3}{#6}
-				}
-			}
-			{ % Neither term is starred: auto sizing
-				\braket[#2]{#3}{\IfNoValueTF{#6}{}{#6}}
-			}
-		}
-	}
-	{ % No contraction
-		\leftsubs[#2]
-		{
-			\IfBooleanTF{#1}
-			{
-				\vphantom{#3}\left\langle\smash{#3}\right\rvert
-			}
-			{
-				\left\langle{#3}\right\rvert
-			}
-			\IfBooleanTF{#5}{*}{}
-			\IfNoValueTF{#6}{}{#6}
-		}
-	}
-}
-%END_FOLD
-
-% Base packages part II %
 \RequirePackage{mathtools}							% More mathematical symbols, e.g., for proofs
 \RequirePackage{wasysym}							% Ditto
 \RequirePackage{amsthm}								% Theorem environments (for proofs)
 \RequirePackage{thmtools}							% Some tools for defining theorems
-\RequirePackage{lastpage}							% For counting the total amount of pages
 \RequirePackage{textcomp}							% Text symbols
-\RequirePackage{fancyhdr}							% Prettier layout and headers
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
 \RequirePackage{tabularx}							% Allows prettier tabular environments
-\RequirePackage{tikz}								% Lets you draw images
-\RequirePackage{tikz-cd}                            % Lets you draw commutative diagrams
 % pgfplots has been removed to avoid compatibility issues
 % \RequirePackage{pgfplots}							% Drawing plots (via TikZ)
 \usetikzlibrary{calc}								% Aritmatic in TikZ drawings
 
-% Theme packages %
+
+%% Import JesseTeX libraries %%
+% Non-essential macros are moved to libraries to save on compilation time
+\newcommand{\importjesselibrary}[1]{%
+	\usepackage{JesseTeX/src/libraries/JesseTeX-#1}
+}
+
+
+%% Theme %%
 \ifthenelse{\boolean{theme}}{% then
-	\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
-	\RequirePackage[linkcolor = red]{hyperref}						% Hyperlinks
-	\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
-	\RequirePackage[
-		backend=biber,
-		sorting=none,
-		style=phys,
-		%urldate=iso,
-		%date=iso
-		]{biblatex}			% Citations
-	\RequirePackage{csquotes}						% Recommended for citation typesetting
-	\emergencystretch 1em
+	\importjesselibrary{theme}
 }{% else
+	% Redefines authand so the document doesn't break if you switch from theme to notheme %
+	\def\authand{\and}
 }
 
 
 %% Language settings %%
-
 
 % Default language (Dutch) %
 %BEGIN_FOLD
@@ -293,7 +135,8 @@
 	}%END_FOLD
 }
 
-% Environments for proofs %
+
+%% Environments for proofs %%
 \@ifclassloaded{beamer}{}{		%Beamer already loads these environments
 	\newtheorem{proposition}{\propo}[\JesseTeX@numbering]
 	\newtheorem*{proposition*}{\propo}
@@ -327,16 +170,21 @@
 \newtheorem*{cor*}{\coro}
 
 
+%% QOL improvements %%
+
 % Swapping \epsilon and \varepsilon %
 \let\temp\epsilon
 \let\epsilon\varepsilon
 \let\varepsilon\temp
+
 % Swapping \phi and \varphi%
 \let\temp\phi
 \let\phi\varphi
 \let\varphi\temp
+
 % Adding \vu as alternative to \nu (for people who actually speak Greek)
 \let\vu\nu
+
 % Some sets %
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -371,7 +219,6 @@
 		\PackageError{JesseTeX}{#1 is not an integer}{Try using an integer}
 	}%
 }
-
 
 % Some probability stuff %
 %BEGIN_FOLD
@@ -414,96 +261,6 @@
 	\ \operatorname{Int}\left( #1 \right)
 }
 %END_FOLD
-
-
-
-%% Theme %%
-
-
-\ifthenelse{\boolean{theme}}{
-	
-	% Tutorial group for in the title %
-	\gdef \@tutrl {}
-	\NewDocumentCommand{\tutorialgroup}{ m } {
-		\gdef \@tutrl {\tutorialstr #1}
-	}
-	\NewDocumentCommand{\wcgroep}{ m }{ \tutorialgroup{#1} }	% Deprecated
-	
-	% authand is only to be used for \author, or your document WILL  break
-	\def\authand{%
-		% \begin{tabular} is implied
-		\end{tabular}%
-		\hskip 1em \@plus.17fil%
-		\begin{tabular}{c}%
-		% \end{tabular} is implied
-	}%
-	
-	% Pretty pagestyle %
-	\pagestyle{fancy}\fancyhf{}
-	% Adding authors to the top right %
-	\fancyhead[R]{
-		\let\@thanksold\thanks
-		\renewcommand{\thanks}[1]{}
-		\begin{tabular}{c}
-			\@author
-		\end{tabular}
-		\let\thanks\@thanksold}
-	% Adding the title to the top left %
-	\fancyhead[L]{\begin{tabular}{l}
-			\@title
-	\end{tabular}}
-	% Adding the page number to the bottom %
-	\fancyfoot[C]{\thepage}
-	% Changing headheight to fit what's inside %
-	\setlength{\headheight}{24pt}
-	
-	% New title function %
-	\newcounter{old@footnote}
-	\renewcommand{\maketitle}{
-		\newpage%
-		\null%
-		\setcounter{old@footnote}{\value{footnote}}%
-		\setcounter{footnote}{0}%
-		\let\old@thefootnote\thefootnote%
-		\renewcommand\thefootnote{\@fnsymbol\c@footnote}
-		%\vskip 2em%				%The title takes enough space already, so I chose to disable this
-		\begin{center}%
-			\let \footnote \thanks%
-			% Title %
-			{\LARGE \@title \par}%
-			\vskip 1.5em%
-			% Author table %
-			{\large%
-				\lineskip .5em%
-				\begin{tabular}{c}%
-					\@author%
-				\end{tabular}\par%
-			}%
-			\vskip 0.5em%
-			% Tutorial group %
-			{\large \@tutrl}%
-			% Date %
-			\vskip 0.5em%
-			{\large \@date}%
-			% Total page count %
-			\vskip 0.5em%
-			\ifthenelse{ \boolean{count} }{%then
-				{\large \totpage\pageref{LastPage}}%
-			}{%else
-			}%
-		\end{center}%
-		\par%
-		\vskip 1.5em%
-		\@thanks
-		\thispagestyle{plain}	%Resets page style to not include header
-		\let\thefootnote\old@thefootnote
-		\setcounter{footnote}{\value{old@footnote}}
-		}%
-}{%else
-	% Redefines authand so the document doesn't break if you switch from theme to notheme %
-	\def\authand{\and}
-}
-
 
 
 %% Easter eggs (very secret) %%

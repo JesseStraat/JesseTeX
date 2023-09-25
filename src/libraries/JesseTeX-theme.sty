@@ -1,0 +1,101 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% The following packages are used for some technical things %
+\RequirePackage{ifthen}
+\RequirePackage{xstring}
+\RequirePackage{xparse}
+\RequirePackage{xspace}
+
+\RequirePackage{fancyhdr}						% Prettier layout and headers
+\RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
+\RequirePackage[linkcolor = red]{hyperref}		% Hyperlinks
+\RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
+\RequirePackage[
+    backend=biber,
+    sorting=none,
+    style=phys,
+    %urldate=iso,
+    %date=iso
+    ]{biblatex}			                        % Citations
+\RequirePackage{csquotes}						% Recommended for citation typesetting
+\RequirePackage{lastpage}						% For counting the total amount of pages
+
+\emergencystretch 1em
+
+% Tutorial group for in the title %
+\gdef \@tutrl {}
+\NewDocumentCommand{\tutorialgroup}{ m } {
+    \gdef \@tutrl {\tutorialstr #1}
+}
+\NewDocumentCommand{\wcgroep}{ m }{ \tutorialgroup{#1} }	% Deprecated
+
+% authand is only to be used for \author, or your document WILL  break
+\def\authand{%
+    % \begin{tabular} is implied
+    \end{tabular}%
+    \hskip 1em \@plus.17fil%
+    \begin{tabular}{c}%
+    % \end{tabular} is implied
+}%
+
+% Pretty pagestyle %
+\pagestyle{fancy}\fancyhf{}
+% Adding authors to the top right %
+\fancyhead[R]{
+    \let\@thanksold\thanks
+    \renewcommand{\thanks}[1]{}
+    \begin{tabular}{c}
+        \@author
+    \end{tabular}
+    \let\thanks\@thanksold}
+% Adding the title to the top left %
+\fancyhead[L]{\begin{tabular}{l}
+        \@title
+\end{tabular}}
+% Adding the page number to the bottom %
+\fancyfoot[C]{\thepage}
+% Changing headheight to fit what's inside %
+\setlength{\headheight}{24pt}
+
+% New title function %
+\newcounter{old@footnote}
+\renewcommand{\maketitle}{
+    \newpage%
+    \null%
+    \setcounter{old@footnote}{\value{footnote}}%
+    \setcounter{footnote}{0}%
+    \let\old@thefootnote\thefootnote%
+    \renewcommand\thefootnote{\@fnsymbol\c@footnote}
+    %\vskip 2em%				%The title takes enough space already, so I chose to disable this
+    \begin{center}%
+        \let \footnote \thanks%
+        % Title %
+        {\LARGE \@title \par}%
+        \vskip 1.5em%
+        % Author table %
+        {\large%
+            \lineskip .5em%
+            \begin{tabular}{c}%
+                \@author%
+            \end{tabular}\par%
+        }%
+        \vskip 0.5em%
+        % Tutorial group %
+        {\large \@tutrl}%
+        % Date %
+        \vskip 0.5em%
+        {\large \@date}%
+        % Total page count %
+        \vskip 0.5em%
+        \ifthenelse{ \boolean{count} }{%then
+            {\large \totpage\pageref{LastPage}}%
+        }{%else
+        }%
+    \end{center}%
+    \par%
+    \vskip 1.5em%
+    \@thanks
+    \thispagestyle{plain}	%Resets page style to not include header
+    \let\thefootnote\old@thefootnote
+    \setcounter{footnote}{\value{old@footnote}}
+    }%

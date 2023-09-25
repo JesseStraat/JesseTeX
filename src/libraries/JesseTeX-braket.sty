@@ -1,0 +1,114 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% The following packages are used for some technical things %
+\RequirePackage{ifthen}
+\RequirePackage{xstring}
+\RequirePackage{xparse}
+\RequirePackage{xspace}
+
+\RequirePackage{physics}        % Will remove later
+
+\DeclareDocumentCommand\leftsubs{ o m }
+{ % Left subscript
+	\IfNoValueTF{#1}
+	{
+		#2
+	}
+	{
+		\mkern\thinmuskip {\vphantom{#2}}_{#1}{#2}
+	}
+}
+\DeclareDocumentCommand\innerproduct{ s o m o g }
+{ % Inner product
+	\leftsubs[#2]
+	{
+		\IfBooleanTF{#1}
+		{ % No resize
+			\IfNoValueTF{#5}
+			{
+				\IfNoValueTF{#4}
+				{
+					\vphantom{#3}\left\langle\smash{#3}\middle\vert\smash{#3}\right\rangle
+				}
+				{
+					\vphantom{#3#4}\left\langle\smash{#3}\middle\vert{#4}\middle\vert\smash{#3}\right\rangle
+				}
+			}
+			{
+				\IfNoValueTF{#4}
+				{
+					\vphantom{#3#5}\left\langle\smash{#3}\middle\vert\smash{#5}\right\rangle
+				}
+				{
+					\vphantom{#3#4#5}\left\langle\smash{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert\smash{#5}\right\rangle
+				}
+			}
+		}
+		{ % Auto resize
+			\IfNoValueTF{#5}
+			{
+				\IfNoValueTF{#4}
+				{
+					\left\langle{#3}\middle\vert{#3}\right\rangle
+				}
+				{
+					\left\langle{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert{#3}\right\rangle
+				}
+			}
+			{
+				\IfNoValueTF{#4}
+				{
+					\left\langle{#3}\middle\vert{#5}\right\rangle
+				}
+				{
+					\left\langle{#3}\middle\vert\mkern\thinmuskip{#4}\mkern\thinmuskip\middle\vert{#5}\right\rangle
+				}
+			}
+		}
+	}
+}
+\DeclareDocumentCommand\bra{ s o m t\ket s g }
+{ % Bra but with a possible subscript to the left
+	\IfBooleanTF{#4}
+	{ % Contraction
+		\IfBooleanTF{#1}
+		{ % Bra has a star: no resize
+			\IfNoValueTF{#6}
+			{
+				\braket*[#2]{#3}{} \IfBooleanTF{#5}{*}{}
+			}
+			{
+				\braket*[#2]{#3}{#6}
+			}
+		}
+		{
+			\IfBooleanTF{#5}
+			{ % Ket has a star: no resize
+				\IfNoValueTF{#6}
+				{
+					\braket[#2]{#3}{} *
+				}
+				{
+					\braket*[#2]{#3}{#6}
+				}
+			}
+			{ % Neither term is starred: auto sizing
+				\braket[#2]{#3}{\IfNoValueTF{#6}{}{#6}}
+			}
+		}
+	}
+	{ % No contraction
+		\leftsubs[#2]
+		{
+			\IfBooleanTF{#1}
+			{
+				\vphantom{#3}\left\langle\smash{#3}\right\rvert
+			}
+			{
+				\left\langle{#3}\right\rvert
+			}
+			\IfBooleanTF{#5}{*}{}
+			\IfNoValueTF{#6}{}{#6}
+		}
+	}
+}
