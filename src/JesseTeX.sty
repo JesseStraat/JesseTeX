@@ -94,7 +94,7 @@
 \usetikzlibrary{calc}								% Aritmatic in TikZ drawings
 
 
-%% Import JesseTeX libraries
+%% Import JesseTeX libraries %%
 % Non-essential macros are moved to libraries to save on compilation time
 \newcommand{\importjesselibrary}[1]{%
 	\usepackage{JesseTeX/src/libraries/JesseTeX-#1}
@@ -109,8 +109,8 @@
 	\def\authand{\and}
 }
 
-%% Language settings %%
 
+%% Language settings %%
 
 % Default language (Dutch) %
 %BEGIN_FOLD
@@ -138,7 +138,8 @@
 	}%END_FOLD
 }
 
-% Environments for proofs %
+
+%% Environments for proofs %%
 \@ifclassloaded{beamer}{}{		%Beamer already loads these environments
 	\newtheorem{proposition}{\propo}[\JesseTeX@numbering]
 	\newtheorem*{proposition*}{\propo}
@@ -172,16 +173,21 @@
 \newtheorem*{cor*}{\coro}
 
 
+%% QOL improvements %%
+
 % Swapping \epsilon and \varepsilon %
 \let\temp\epsilon
 \let\epsilon\varepsilon
 \let\varepsilon\temp
+
 % Swapping \phi and \varphi%
 \let\temp\phi
 \let\phi\varphi
 \let\varphi\temp
+
 % Adding \vu as alternative to \nu (for people who actually speak Greek)
 \let\vu\nu
+
 % Some sets %
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
@@ -216,7 +222,6 @@
 		\PackageError{JesseTeX}{#1 is not an integer}{Try using an integer}
 	}%
 }
-
 
 % Some probability stuff %
 %BEGIN_FOLD
