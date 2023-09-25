@@ -241,6 +241,7 @@
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
 \RequirePackage{tabularx}							% Allows prettier tabular environments
 \RequirePackage{tikz}								% Lets you draw images
+\RequirePackage{tikz-cd}                            % Lets you draw commutative diagrams
 % pgfplots has been removed to avoid compatibility issues
 % \RequirePackage{pgfplots}							% Drawing plots (via TikZ)
 \usetikzlibrary{calc}								% Aritmatic in TikZ drawings
@@ -341,8 +342,10 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\C}{\mathbb{C}}
 \newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
 \newcommand{\K}{\mathbb{K}}
-\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\bP}{\mathbb{P}}
+\newcommand{\Id}{\operatorname{Id}}
 
 
 
@@ -380,10 +383,10 @@
 	\mathbb{E}^{ #2 }\left[ #1 \right]
 }
 \NewDocumentCommand{\vari}{ m } {					% Variance of a variable
-	\mathrm{Var}\left( #1 \right)
+	\operatorname{Var}\left( #1 \right)
 }
 \NewDocumentCommand{\mse}{ m } {					% Mean squared error of a variable
-	\mathrm{MSE}\left( #1 \right)
+	\operatorname{MSE}\left( #1 \right)
 }
 % Deprecated macros for a course in probability and statistics %
 \newcommand{\convp}{\overset{p}{\to}}
@@ -408,7 +411,7 @@
 %BEGIN_FOLD
 % Set interior %
 \NewDocumentCommand{\intr}{ m } {
-	\ \mathrm{Int}\mathopen{}\mathclose\bgroup\left( #1 \aftergroup\egroup\right)
+	\ \operatorname{Int}\left( #1 \right)
 }
 %END_FOLD
 
@@ -530,4 +533,9 @@
 	(-3.15*\susscale+\xoffset,4.94*\susscale+\yoffset) .. controls (-2.63*\susscale+\xoffset,5.38*\susscale+\yoffset) and (-2.61*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
 	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) -- cycle;
 	
+}
+
+% Improved command for bijection arrows %
+\NewDocumentCommand{\bijection}{}{%
+  \hookrightarrow\mathrel{\mspace{-15mu}}\rightarrow
 }
