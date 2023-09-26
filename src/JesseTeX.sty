@@ -32,6 +32,7 @@
 \RequirePackage{xstring}
 \RequirePackage{xparse}
 \RequirePackage{xspace}
+\RequirePackage{pgffor}
 
 % Setting up the options %
 \SetupKeyvalOptions{}
@@ -86,9 +87,6 @@
 \RequirePackage{textcomp}							% Text symbols
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
 \RequirePackage{tabularx}							% Allows prettier tabular environments
-% pgfplots has been removed to avoid compatibility issues
-% \RequirePackage{pgfplots}							% Drawing plots (via TikZ)
-\usetikzlibrary{calc}								% Aritmatic in TikZ drawings
 
 
 %% Import JesseTeX libraries %%
@@ -263,34 +261,7 @@
 %END_FOLD
 
 
-%% Easter eggs (very secret) %%
-
-% Improved QED command (as opposed to \qed) %
-\newcommand{\QED}{
-	\begin{tikzpicture}
-		\draw [fill=red] (0, 0) -- (0, 4) arc[start angle=180, end angle=0, x radius = 1.5, y radius = 1] -- (3, 0) arc[start angle = 0, end angle = -180, x radius = 0.6, y radius = 0.25] -- (1.8, 0.8) -- (1.2, 0.8) -- (1.2, 0) arc[start angle = 0, end angle = -180, x radius = 0.6, y radius = 0.25];
-		\draw [fill=white] (2.2,3.2) circle [x radius = 1.2, y radius = 0.6];
-		\draw [fill=red] (0, 3.7) arc[start angle = 90, end angle = 270, y radius = 1.2, x radius = 0.6];
-	\end{tikzpicture}
-}
-
-% Including tikzducks for scientific applications %
-% https://tex.stackexchange.com/questions/422989/scientific-applications-of-the-tikzducks/423094 %
-\RequirePackage{tikzducks}
-% A scientific application %
-\newcommand{\sussyduck}[1]{
-	\duck[body = #1, bill = #1]
-	\def\susscale{0.35}
-	\def\xoffset{2.2}
-	\def\yoffset{-.35}
-	\shade[top color=blue!20, bottom color=blue!20!black]
-	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) .. controls (-3.07*\susscale+\xoffset,6.37*\susscale+\yoffset) and (-4.06*\susscale+\xoffset,6.58*\susscale+\yoffset) ..
-	(-4.61*\susscale+\xoffset,6.37*\susscale+\yoffset) .. controls (-5.15*\susscale+\xoffset,6.16*\susscale+\yoffset) and (-5.44*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
-	(-5.21*\susscale+\xoffset,5.38*\susscale+\yoffset) .. controls (-4.97*\susscale+\xoffset,4.91*\susscale+\yoffset) and (-3.67*\susscale+\xoffset,4.50*\susscale+\yoffset) ..
-	(-3.15*\susscale+\xoffset,4.94*\susscale+\yoffset) .. controls (-2.63*\susscale+\xoffset,5.38*\susscale+\yoffset) and (-2.61*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
-	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) -- cycle;
-	
-}
+%% Easter eggs (very secret) %%s
 
 % Improved command for bijection arrows %
 \NewDocumentCommand{\bijection}{}{%
