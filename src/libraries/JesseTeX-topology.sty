@@ -1,0 +1,12 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% The following packages are used for some technical things %
+\RequirePackage{ifthen}
+\RequirePackage{xstring}
+\RequirePackage{xparse}
+\RequirePackage{xspace}
+
+% Set interior %
+\NewDocumentCommand{\intr}{ m } {
+	\ \operatorname{Int}\left( #1 \right)
+}

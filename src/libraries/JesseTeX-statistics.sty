@@ -1,0 +1,27 @@
+\NeedsTeXFormat{LaTeX2e}
+
+% The following packages are used for some technical things %
+\RequirePackage{ifthen}
+\RequirePackage{xstring}
+\RequirePackage{xparse}
+\RequirePackage{xspace}
+
+\RequirePackage{amsfonts}                           % For mathbb
+
+\NewDocumentCommand{\prob}{ m } {					% Probability of a variable
+	\mathbb{P}\left( #1 \right)
+}
+\NewDocumentCommand{\per}{ m }{ \prob{#1} }			% Deprecated
+\NewDocumentCommand{\ex}{ m O{} } {					% Expectation value of a variable
+	\mathbb{E}^{ #2 }\left[ #1 \right]
+}
+\NewDocumentCommand{\vari}{ m } {					% Variance of a variable
+	\operatorname{Var}\left( #1 \right)
+}
+\NewDocumentCommand{\mse}{ m } {					% Mean squared error of a variable
+	\operatorname{MSE}\left( #1 \right)
+}
+% Deprecated macros for a course in probability and statistics %
+\newcommand{\convp}{\overset{p}{\to}}
+\newcommand{\scrf}{\mathcal{F}}
+\newcommand{\scrp}{\mathcal{P}}

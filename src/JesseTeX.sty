@@ -205,6 +205,7 @@
 	\addtocounter{equation}{1}\tag{\theequation}
 }
 
+% Redefinition of \quad %
 \let\@quad\quad										% Temporary quad function
 % #1(number) = number of quads
 \RenewDocumentCommand{\quad}{ !O{1} }{%
@@ -217,48 +218,6 @@
 		\PackageError{JesseTeX}{#1 is not an integer}{Try using an integer}
 	}%
 }
-
-% Some probability stuff %
-%BEGIN_FOLD
-\NewDocumentCommand{\prob}{ m } {					% Probability of a variable
-	\mathbb{P}\left( #1 \right)
-}
-\NewDocumentCommand{\per}{ m }{ \prob{#1} }			% Deprecated
-\NewDocumentCommand{\ex}{ m O{} } {					% Expectation value of a variable
-	\mathbb{E}^{ #2 }\left[ #1 \right]
-}
-\NewDocumentCommand{\vari}{ m } {					% Variance of a variable
-	\operatorname{Var}\left( #1 \right)
-}
-\NewDocumentCommand{\mse}{ m } {					% Mean squared error of a variable
-	\operatorname{MSE}\left( #1 \right)
-}
-% Deprecated macros for a course in probability and statistics %
-\newcommand{\convp}{\overset{p}{\to}}
-\newcommand{\scrf}{\mathcal{F}}
-\newcommand{\scrp}{\mathcal{P}}
-%END_FOLD
-
-% Some analysis stuff %
-%BEGIN_FOLD
-% Upper integral %
-\def\upint{\mathchoice%
-	{\mkern13mu\overline{\vphantom{\intop}\mkern10mu}\mkern-20mu}%
-	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
-	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
-	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
-	\int}
-% Lower integral %
-\def\lowint{\mkern3mu\underline{\vphantom{\intop}\mkern10mu}\mkern-10mu\int}
-%END_FOLD
-
-% Topology %
-%BEGIN_FOLD
-% Set interior %
-\NewDocumentCommand{\intr}{ m } {
-	\ \operatorname{Int}\left( #1 \right)
-}
-%END_FOLD
 
 
 %% Easter eggs (very secret) %%s
