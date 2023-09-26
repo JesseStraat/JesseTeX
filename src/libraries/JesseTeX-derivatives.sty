@@ -6,7 +6,22 @@
 \RequirePackage{xparse}
 \RequirePackage{xspace}
 
-\RequirePackage{physics}        % Will remove later
+
+%% Derivative definitions inspired by Physics package %%
+
+
+\DeclareDocumentCommand\differential{ o g d() }{ % Differential 'd'
+	% o: optional n for nth differential
+	% g: optional argument for readability and to control spacing
+	% d: long-form as in d(cos x)
+	\IfNoValueTF{#2}{
+		\IfNoValueTF{#3}
+			{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}}
+			{\mathinner{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}\argopen(#3\argclose)}}
+		}
+		{\mathinner{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}#2} \IfNoValueTF{#3}{}{(#3)}}
+	}
+\DeclareDocumentCommand\dd{}{\differential} % Shorthand for \differential
 
 \DeclareDocumentCommand\derivative{ s o m g d() }
 { % Total derivative
@@ -21,11 +36,13 @@
 	\IfNoValueTF{#4}
 	{
 		\IfNoValueTF{#5}
-		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}}}{\diffd #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+		{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}}}{\mathrm{d} #3\IfNoValueTF{#2}{}{^{#2}}}}
+		{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}}}{\mathrm{d} #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
 	}
-	{\fractype{\diffd \IfNoValueTF{#2}{}{^{#2}} #3}{\diffd #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
+	{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}} #3}{\mathrm{d} #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
 }
+\DeclareDocumentCommand\dv{}{\derivative} % Shorthand
+
 \DeclareDocumentCommand\partialderivative{ s o m g g d() }
 { % Partial derivative
 	% s: star for \flatfrac flat derivative
@@ -49,3 +66,4 @@
 		{\fractype{\partial^2 #3}{\partial #4 \partial #5}\IfValueT{#6}{(#6)}}
 	}
 }
+\DeclareDocumentCommand\pdv{}{\partialderivative} % Shorthand
