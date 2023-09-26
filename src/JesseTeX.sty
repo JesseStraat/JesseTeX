@@ -32,6 +32,7 @@
 \RequirePackage{xstring}
 \RequirePackage{xparse}
 \RequirePackage{xspace}
+\RequirePackage{pgffor}
 
 % Setting up the options %
 \SetupKeyvalOptions{}
@@ -86,9 +87,6 @@
 \RequirePackage{textcomp}							% Text symbols
 \RequirePackage{comment}							% Allows a comment environment for multi-line comments
 \RequirePackage{tabularx}							% Allows prettier tabular environments
-% pgfplots has been removed to avoid compatibility issues
-% \RequirePackage{pgfplots}							% Drawing plots (via TikZ)
-\usetikzlibrary{calc}								% Aritmatic in TikZ drawings
 
 
 %% Import JesseTeX libraries %%
@@ -207,6 +205,7 @@
 	\addtocounter{equation}{1}\tag{\theequation}
 }
 
+% Redefinition of \quad %
 \let\@quad\quad										% Temporary quad function
 % #1(number) = number of quads
 \RenewDocumentCommand{\quad}{ !O{1} }{%
@@ -220,77 +219,8 @@
 	}%
 }
 
-% Some probability stuff %
-%BEGIN_FOLD
-\NewDocumentCommand{\prob}{ m } {					% Probability of a variable
-	\mathbb{P}\left( #1 \right)
-}
-\NewDocumentCommand{\per}{ m }{ \prob{#1} }			% Deprecated
-\NewDocumentCommand{\ex}{ m O{} } {					% Expectation value of a variable
-	\mathbb{E}^{ #2 }\left[ #1 \right]
-}
-\NewDocumentCommand{\vari}{ m } {					% Variance of a variable
-	\operatorname{Var}\left( #1 \right)
-}
-\NewDocumentCommand{\mse}{ m } {					% Mean squared error of a variable
-	\operatorname{MSE}\left( #1 \right)
-}
-% Deprecated macros for a course in probability and statistics %
-\newcommand{\convp}{\overset{p}{\to}}
-\newcommand{\scrf}{\mathcal{F}}
-\newcommand{\scrp}{\mathcal{P}}
-%END_FOLD
 
-% Some analysis stuff %
-%BEGIN_FOLD
-% Upper integral %
-\def\upint{\mathchoice%
-	{\mkern13mu\overline{\vphantom{\intop}\mkern10mu}\mkern-20mu}%
-	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
-	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
-	{\mkern7mu\overline{\vphantom{\intop}\mkern10mu}\mkern-14mu}%
-	\int}
-% Lower integral %
-\def\lowint{\mkern3mu\underline{\vphantom{\intop}\mkern10mu}\mkern-10mu\int}
-%END_FOLD
-
-% Topology %
-%BEGIN_FOLD
-% Set interior %
-\NewDocumentCommand{\intr}{ m } {
-	\ \operatorname{Int}\left( #1 \right)
-}
-%END_FOLD
-
-
-%% Easter eggs (very secret) %%
-
-% Improved QED command (as opposed to \qed) %
-\newcommand{\QED}{
-	\begin{tikzpicture}
-		\draw [fill=red] (0, 0) -- (0, 4) arc[start angle=180, end angle=0, x radius = 1.5, y radius = 1] -- (3, 0) arc[start angle = 0, end angle = -180, x radius = 0.6, y radius = 0.25] -- (1.8, 0.8) -- (1.2, 0.8) -- (1.2, 0) arc[start angle = 0, end angle = -180, x radius = 0.6, y radius = 0.25];
-		\draw [fill=white] (2.2,3.2) circle [x radius = 1.2, y radius = 0.6];
-		\draw [fill=red] (0, 3.7) arc[start angle = 90, end angle = 270, y radius = 1.2, x radius = 0.6];
-	\end{tikzpicture}
-}
-
-% Including tikzducks for scientific applications %
-% https://tex.stackexchange.com/questions/422989/scientific-applications-of-the-tikzducks/423094 %
-\RequirePackage{tikzducks}
-% A scientific application %
-\newcommand{\sussyduck}[1]{
-	\duck[body = #1, bill = #1]
-	\def\susscale{0.35}
-	\def\xoffset{2.2}
-	\def\yoffset{-.35}
-	\shade[top color=blue!20, bottom color=blue!20!black]
-	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) .. controls (-3.07*\susscale+\xoffset,6.37*\susscale+\yoffset) and (-4.06*\susscale+\xoffset,6.58*\susscale+\yoffset) ..
-	(-4.61*\susscale+\xoffset,6.37*\susscale+\yoffset) .. controls (-5.15*\susscale+\xoffset,6.16*\susscale+\yoffset) and (-5.44*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
-	(-5.21*\susscale+\xoffset,5.38*\susscale+\yoffset) .. controls (-4.97*\susscale+\xoffset,4.91*\susscale+\yoffset) and (-3.67*\susscale+\xoffset,4.50*\susscale+\yoffset) ..
-	(-3.15*\susscale+\xoffset,4.94*\susscale+\yoffset) .. controls (-2.63*\susscale+\xoffset,5.38*\susscale+\yoffset) and (-2.61*\susscale+\xoffset,5.85*\susscale+\yoffset) ..
-	(-2.84*\susscale+\xoffset,6.11*\susscale+\yoffset) -- cycle;
-	
-}
+%% Easter eggs (very secret) %%s
 
 % Improved command for bijection arrows %
 \NewDocumentCommand{\bijection}{}{%
