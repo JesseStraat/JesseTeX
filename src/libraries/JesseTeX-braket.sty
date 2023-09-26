@@ -6,7 +6,9 @@
 \RequirePackage{xparse}
 \RequirePackage{xspace}
 
-\RequirePackage{physics}        % Will remove later
+
+%% Braket inspired by Physics package %%
+
 
 \DeclareDocumentCommand\leftsubs{ o m }
 { % Left subscript
@@ -111,4 +113,17 @@
 			\IfNoValueTF{#6}{}{#6}
 		}
 	}
+}
+
+\DeclareDocumentCommand\ket{ s m }
+{ % Ket
+	\IfBooleanTF{#1}
+	{
+		\vphantom{#3}\left\lvert\smash{#3}\right\rangle
+	}
+	{
+		\left\lvert{#3}\right\rangle
+	}
+	\IfBooleanTF{#5}{*}{}
+	\IfNoValueTF{#6}{}{#6}
 }
