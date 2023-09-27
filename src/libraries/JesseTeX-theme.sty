@@ -13,6 +13,10 @@
 \RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
 
 \SetupKeyvalOptions{}
+
+    \newboolean{count}
+    \setboolean{count}{true}
+    \DeclareVoidOption{nocount}{ \setboolean{count}{false} }	% "Don't display total number of pages in title"
 	
 	\newboolean{customcites}
 	\setboolean{customcites}{false}

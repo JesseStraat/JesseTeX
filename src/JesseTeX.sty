@@ -43,9 +43,7 @@
 	
 	\DeclareStringOption[]{numbering}	% Numbering of theorem-like environments
 	
-	\newboolean{count}
-	\setboolean{count}{true}
-	\DeclareVoidOption{nocount}{ \setboolean{count}{false} }	% "Don't display total number of pages in title"
+	\DeclareBoolOption[false]{nocount}	% "Don't display total number of pages in title"
 	
 	\DeclareBoolOption{customcite}	% "Let me choose my own citation options"
 	
@@ -101,10 +99,12 @@
 %% Theme %%
 \ifthenelse{\boolean{theme}}{% then
 	\ifJesseTeX@customcite					% Makes it possible to define a custom citation style
-		\importjesselibrary[customcite]{theme}
-	\else													% Default citation style
-		\importjesselibrary{theme}
+		\PassOptionsToPackage{customcite}{JesseTeX-theme}
 	\fi
+	\ifJesseTeX@nocount
+		\PassOptionsToPackage{nocount}{JesseTeX-theme}
+	\fi
+	\importjesselibrary{theme}
 }{% else
 	% Redefines authand so the document doesn't break if you switch from theme to notheme %
 	\def\authand{\and}
