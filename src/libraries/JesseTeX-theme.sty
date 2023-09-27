@@ -1,6 +1,7 @@
 \NeedsTeXFormat{LaTeX2e}
 
 % The following packages are used for some technical things %
+\RequirePackage{kvoptions}
 \RequirePackage{ifthen}
 \RequirePackage{xstring}
 \RequirePackage{xparse}
@@ -10,13 +11,27 @@
 \RequirePackage[margin=1 in, a4paper]{geometry}	% Sets margins - editable with \geometry{<options>}
 \RequirePackage[linkcolor = red]{hyperref}		% Hyperlinks
 \RequirePackage[ocgcolorlinks]{ocgx2}			% This ensures hyperlinks aren't printed (ocgcolorlinks), while still being able to cover multiple lines (as opposed to ocgcolorlinks in hyperref)
-\RequirePackage[
-    backend=biber,
-    sorting=none,
-    style=phys,
-    %urldate=iso,
-    %date=iso
-    ]{biblatex}			                        % Citations
+
+\SetupKeyvalOptions{}
+	
+	\newboolean{customcites}
+	\setboolean{customcites}{false}
+	\DeclareVoidOption{customcite}{ \setboolean{customcites}{true} }	% "Let me choose my own citation options"
+	
+\ProcessKeyvalOptions*
+
+\ifthenelse{\boolean{customcites}}{
+    \RequirePackage{biblatex}
+}
+{
+    \RequirePackage[
+        backend=biber,
+        sorting=none,
+        style=phys,
+        %urldate=iso,
+        %date=iso
+        ]{biblatex}			                        % Citations
+}
 \RequirePackage{csquotes}						% Recommended for citation typesetting
 \RequirePackage{lastpage}						% For counting the total amount of pages
 

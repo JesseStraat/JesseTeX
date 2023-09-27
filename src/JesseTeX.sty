@@ -47,6 +47,8 @@
 	\setboolean{count}{true}
 	\DeclareVoidOption{nocount}{ \setboolean{count}{false} }	% "Don't display total number of pages in title"
 	
+	\DeclareBoolOption{customcite}	% "Let me choose my own citation options"
+	
 \ProcessKeyvalOptions*
 
 % Checks whether we should apply the theme to the document %
@@ -91,14 +93,18 @@
 
 %% Import JesseTeX libraries %%
 % Non-essential macros are moved to libraries to save on compilation time
-\newcommand{\importjesselibrary}[1]{%
-	\usepackage{JesseTeX/src/libraries/JesseTeX-#1}
+\newcommand{\importjesselibrary}[2][]{%
+	\usepackage[#1]{JesseTeX/src/libraries/JesseTeX-#2}
 }
 
 
 %% Theme %%
 \ifthenelse{\boolean{theme}}{% then
-	\importjesselibrary{theme}
+	\ifJesseTeX@customcite					% Makes it possible to define a custom citation style
+		\importjesselibrary[customcite]{theme}
+	\else													% Default citation style
+		\importjesselibrary{theme}
+	\fi
 }{% else
 	% Redefines authand so the document doesn't break if you switch from theme to notheme %
 	\def\authand{\and}
