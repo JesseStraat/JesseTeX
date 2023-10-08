@@ -98,21 +98,26 @@
                 \@author%
             \end{tabular}\par%
         }%
-        \vskip 0.5em%
         % Tutorial group %
-        {\large \@tutrl}%
+        \ifx\@tutrl\empty
+        \else
+            \vskip 0.5em%
+            {\large \@tutrl}%
+        \fi
         % Date %
-        \vskip 0.5em%
-        {\large \@date}%
+        \ifx\@date\empty
+        \else
+            \vskip 0.5em%
+            {\large \@date}%
+        \fi
         % Total page count %
-        \vskip 0.5em%
         \ifthenelse{ \boolean{count} }{%then
+            \vskip 0.5em%
             {\large \totpage\pageref{LastPage}}%
         }{%else
         }%
     \end{center}%
     \par%
-    \vskip 1.5em%
     \@thanks
     \thispagestyle{plain}	%Resets page style to not include header
     \let\thefootnote\old@thefootnote
