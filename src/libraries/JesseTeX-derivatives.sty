@@ -37,7 +37,7 @@
 	{
 		\IfNoValueTF{#5}
 		{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}}}{\mathrm{d} #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}}}{\mathrm{d} #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#5\argclose)}
+		{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}}}{\mathrm{d} #3\IfNoValueTF{#2}{}{^{#2}}} \left(#5\right)}
 	}
 	{\fractype{\mathrm{d} \IfNoValueTF{#2}{}{^{#2}} #3}{\mathrm{d} #4\IfNoValueTF{#2}{}{^{#2}}}\IfValueT{#5}{(#5)}}
 }
@@ -58,7 +58,7 @@
 	{
 		\IfNoValueTF{#6}
 		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}}}
-		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \argopen(#6\argclose)}
+		{\fractype{\partial \IfNoValueTF{#2}{}{^{#2}}}{\partial #3\IfNoValueTF{#2}{}{^{#2}}} \left(#6\right)}
 	}
 	{
 		\IfNoValueTF{#5}
