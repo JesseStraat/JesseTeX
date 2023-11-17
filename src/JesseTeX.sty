@@ -123,6 +123,8 @@
 \newcommand{\theor}{Stelling}
 \newcommand{\clai}{Bewering}
 \newcommand{\coro}{Gevolg}
+\newcommand{\examp}{Voorbeeld}
+\newcommand{\remk}{Opmerking}
 %END_FOLD
 
 % Other languages %
@@ -136,6 +138,8 @@
 		\renewcommand{\theor}{Theorem}
 		\renewcommand{\clai}{Claim}
 		\renewcommand{\coro}{Corollary}
+		\renewcommand{\examp}{Example}
+		\renewcommand{\remk}{Remark}
 	}%END_FOLD
 }
 
@@ -159,6 +163,14 @@
 	
 	\newtheorem{corollary}[proposition]{\coro}
 	\newtheorem*{corollary*}{\coro}
+	
+	\declaretheoremstyle[headfont=\normalfont\bfseries,notefont=\itshape, headpunct=.,bodyfont=\normalfont,spacebelow=1em]{example}
+	
+	\declaretheorem[sibling=proposition,style=example,name=\examp]{example}
+	\declaretheorem[numbered=no,style=example,name=\examp]{example*}
+
+	\declaretheorem[sibling=proposition,style=example,name=\remk]{remark}
+	\declaretheorem[numbered=no,style=example,name=\remk]{remark*}
 }
 
 % Deprecated environments %
