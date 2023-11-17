@@ -17,7 +17,7 @@
 	\IfNoValueTF{#2}{
 		\IfNoValueTF{#3}
 			{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}}
-			{\mathinner{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}\argopen(#3\argclose)}}
+			{\mathinner{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}\left(#3\right)}}
 		}
 		{\mathinner{\mathrm{d}\IfNoValueTF{#1}{}{^{#1}}#2} \IfNoValueTF{#3}{}{(#3)}}
 	}
