@@ -43,9 +43,9 @@
 	
 	\DeclareStringOption[]{numbering}	% Numbering of theorem-like environments
 	
-	\newboolean{count}
-	\setboolean{count}{true}
-	\DeclareVoidOption{nocount}{ \setboolean{count}{false} }	% "Don't display total number of pages in title"
+	\DeclareBoolOption[false]{nocount}	% "Don't display total number of pages in title"
+	
+	\DeclareBoolOption{customcite}	% "Let me choose my own citation options"
 	
 \ProcessKeyvalOptions*
 
@@ -69,7 +69,7 @@
 %% Setup %%
 
 % Base packages %
-\RequirePackage{color}								% Helps with colour definitions
+\RequirePackage{xcolor}								% Helps with colour definitions
 \RequirePackage[\JesseTeX@lang]{babel}				% Language-related things
 \RequirePackage{graphicx}							% Adding images
 \usepackage{caption}								% Used primarily for subfigures
@@ -91,13 +91,19 @@
 
 %% Import JesseTeX libraries %%
 % Non-essential macros are moved to libraries to save on compilation time
-\newcommand{\importjesselibrary}[1]{%
-	\usepackage{JesseTeX/src/libraries/JesseTeX-#1}
+\newcommand{\importjesselibrary}[2][]{%
+	\usepackage[#1]{JesseTeX/src/libraries/JesseTeX-#2}
 }
 
 
 %% Theme %%
 \ifthenelse{\boolean{theme}}{% then
+	\ifJesseTeX@customcite					% Makes it possible to define a custom citation style
+		\PassOptionsToPackage{customcite}{JesseTeX-theme}
+	\fi
+	\ifJesseTeX@nocount
+		\PassOptionsToPackage{nocount}{JesseTeX-theme}
+	\fi
 	\importjesselibrary{theme}
 }{% else
 	% Redefines authand so the document doesn't break if you switch from theme to notheme %
@@ -117,6 +123,8 @@
 \newcommand{\theor}{Stelling}
 \newcommand{\clai}{Bewering}
 \newcommand{\coro}{Gevolg}
+\newcommand{\examp}{Voorbeeld}
+\newcommand{\remk}{Opmerking}
 %END_FOLD
 
 % Other languages %
@@ -130,6 +138,8 @@
 		\renewcommand{\theor}{Theorem}
 		\renewcommand{\clai}{Claim}
 		\renewcommand{\coro}{Corollary}
+		\renewcommand{\examp}{Example}
+		\renewcommand{\remk}{Remark}
 	}%END_FOLD
 }
 
@@ -153,6 +163,14 @@
 	
 	\newtheorem{corollary}[proposition]{\coro}
 	\newtheorem*{corollary*}{\coro}
+	
+	\declaretheoremstyle[headfont=\normalfont\bfseries,notefont=\itshape, headpunct=.,bodyfont=\normalfont,spacebelow=1em]{example}
+	
+	\declaretheorem[sibling=proposition,style=example,name=\examp]{example}
+	\declaretheorem[numbered=no,style=example,name=\examp]{example*}
+
+	\declaretheorem[sibling=proposition,style=example,name=\remk]{remark}
+	\declaretheorem[numbered=no,style=example,name=\remk]{remark*}
 }
 
 % Deprecated environments %
