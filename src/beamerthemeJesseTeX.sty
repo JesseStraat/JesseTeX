@@ -26,6 +26,8 @@
 
 % Title page
 \setbeamertemplate{title page}{%
+	\hfuzz=60pt
+	\vfuzz=10pt
 	\begin{tikzpicture}
 		\draw [white, opacity = 0] ([yshift = -0.2in]current page.north west) rectangle (current page.south east);
 		\fill[stylecolour]([yshift = 0.5in]current page.west) rectangle ([yshift = -0.5in]current page.east);
@@ -39,6 +41,8 @@
 % Section pages
 \AtBeginSection[]{
 	{
+		\hfuzz=60pt
+		\vfuzz=10pt
 		\miniframesoff
 		\begin{frame}
 			\begin{tikzpicture}
@@ -52,6 +56,8 @@
 
 \AtBeginSubsection[]{
 	{
+		\hfuzz=60pt
+		\vfuzz=10pt
 		\miniframesoff
 		\begin{frame}
 			\begin{tikzpicture}
