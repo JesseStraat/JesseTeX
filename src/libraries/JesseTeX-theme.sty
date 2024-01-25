@@ -29,11 +29,12 @@
 }
 {
     \RequirePackage[
-        backend=biber,
-        sorting=none,
-        style=phys,
-        %urldate=iso,
-        %date=iso
+        natbib = true,
+		style = alphabetic,
+		sorting = nty,
+		url=false,
+		giveninits=true,
+		maxbibnames=5
         ]{biblatex}			                        % Citations
 }
 \RequirePackage{csquotes}						% Recommended for citation typesetting
